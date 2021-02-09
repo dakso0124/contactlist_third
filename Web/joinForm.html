@@ -165,17 +165,17 @@ function addresspopup()
             
             <div class="col-sm-4">
              <label class="pt-4"></label>
-              <input type="text" class="form-control" id="second_digit" placeholder="" value="" minlength="3" maxlength="4" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+              <input type="text" class="form-control" id="second_digit" placeholder="" value="" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
-              	전화번호를 입력해 주세요.
+              	전화번호를 올바르게 입력해 주세요.
               </div>
             </div>
             
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
-	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="" minlength="4" maxlength="4" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
+	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
 	            	<div class="invalid-feedback">
-	              		전화번호를 입력해 주세요.
+	              		전화번호를 올바르게 입력해 주세요.
 	            	</div>
             </div>
             

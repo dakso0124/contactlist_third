@@ -60,6 +60,20 @@ function removeChar(e)
 	};
 }
 
+// 그룹 직접 입력
+function showfield(name)
+{
+	if(name=='Other')
+  	{
+		document.getElementById('selfinput').innerHTML='<div class="col-md-6"><label for="group" class="form-label">직접 입력</label><input type="text" class="form-control" id="group" placeholder="" required><div class="invalid-feedback">그룹명을 입력해 주세요.</div></div>';
+  	}
+ 	else
+ 	{
+ 		document.getElementById('selfinput').innerHTML='';
+ 	}
+}
+
+// 주소입력
 function addresspopup()
 {
 	new daum.Postcode(
@@ -149,33 +163,27 @@ function addresspopup()
             
             <div class="col-sm-4">
              <label class="pt-4"></label>
-              <input type="text" class="form-control" id="second_digit" placeholder="" value="" minlength="3" maxlength="4" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+             <div class="input-group">
+              <input type="text" class="form-control" id="second_digit" placeholder="" value="" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
               	전화번호를 입력해 주세요.
+              </div>
               </div>
             </div>
             
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
-	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="" minlength="4" maxlength="4" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
+	            <div class="input-group">
+	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
 	            	<div class="invalid-feedback">
 	              		전화번호를 입력해 주세요.
 	            	</div>
+	            </div>
             </div>
             
             
 <script type="text/javascript">
-function showfield(name)
-{
-	if(name=='Other')
-  	{
-		document.getElementById('selfinput').innerHTML='<div class="col-md-6"><label for="group" class="form-label">직접 입력</label><input type="text" class="form-control" id="group" placeholder="" required><div class="invalid-feedback">그룹명을 입력해 주세요.</div></div>';
-  	}
- 	else
- 	{
- 		document.getElementById('selfinput').innerHTML='';
- 	}
-}
+
 </script>
 <div class="col-sm-12"></div>
 <div class="col-md-4">

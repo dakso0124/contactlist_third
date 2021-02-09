@@ -14,6 +14,12 @@
 		background-repeat: no-repeat;
 		background-size: cover;
 	}
+	header
+	{
+		display : flex;
+		justify-content: flex-end;
+		/* display:inline-block; */
+	}
 </style>
 
 <link href="bootstrap-5.0/css/bootstrap.min.css" rel="stylesheet">
@@ -34,10 +40,19 @@ function movedelete()
 </head>
 <body class="text-center">
 
-		<h1 style="color: white" class="my-5">메인 페이지</h1>
+<header>
+	<div>
+		<button class="w-100 btn btn-md btn-primary" type="submit">정보수정</button>
+	</div>
+	<div>
+		<button class="w-100 btn btn-md btn-primary" type="submit" disabled>로그아웃</button>
+	</div>
+</header>
 
-<h1><span class="blue">&lt;</span>Table<span class="blue">&gt;</span> <span class="yellow">Responsive</pan></h1>
-<h2>Created with love by <a href="https://github.com/pablorgarcia" target="_blank">Pablo García</a></h2>
+		<h1 style="color: #81F5D8" class="my-5">메인 페이지</h1>
+
+<h1><span class="blue">&lt;</span>님<span class="blue">&gt;</span> <span class="yellow">안녕하세요 :D</pan></h1>
+<h2>Edit by <a href="https://github.com/dakso0124" target="_blank">Dakso</a></h2>
 
 <div style="height: 600px;overflow-y: auto;">
 <table class="container">
@@ -55,17 +70,17 @@ function movedelete()
 	</c:forEach> --%>
 	<tbody>
 		<tr>
-			<td>Google</td>
-			<td>9518</td>
-			<td>6369</td>
-			<td>01:32:50</td>
+			<td>정재겸</td>
+			<td>010-2470-2307</td>
+			<td>경기도 성남시 수정구 복정동 702-10 202호 </td>
+			<td>남</td>
 			<td><button class="transparent_button" onclick="moveedit()"><img src="resource/edit.png" alt="" width="30"></button></td>
 			<td><button class="transparent_button" onclick="movedelete()"><img src="resource/delete.png" alt="" width="30"></button></td>
 		</tr>
 		<tr>
-			<td>Twitter</td>
-			<td>7326</td>
-			<td>10437</td>
+			<td>마이꼬르</td>
+			<td>010-2477-2123</td>
+			<td>서울시 어디고 어디쯤 어딘가~~~~~~~~~~~~~~~~~~~~~~~</td>
 			<td>00:51:22</td>
 			<td><button class="transparent_button" onclick="moveedit()"><img src="resource/edit.png" alt="" width="30"></button></td>
 			<td><button class="transparent_button" onclick="movedelete()"><img src="resource/delete.png" alt="" width="30"></button></td>

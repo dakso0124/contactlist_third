@@ -91,6 +91,21 @@ public class UserVO
 		return address;
 	}
 	
+	public String getZipcode()
+	{
+		return address.split("`")[0];
+	}
+	
+	public String getMainaddress()
+	{
+		return address.split("`")[1];
+	}
+	
+	public String getDetailaddress()
+	{
+		return address.split("`")[2];
+	}
+	
 	public void setAddress(String address)
 	{
 		this.address = address;

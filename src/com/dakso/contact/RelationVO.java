@@ -11,11 +11,11 @@ public class RelationVO
 		
 	}
 	
-	public RelationVO(String relation_type, String relation_name)
+	public RelationVO(String relation_type, String relation_name, String userid)
 	{
-
 		this.realation_type = relation_type;
 		this.relation_name = relation_name;
+		this.userid = userid;
 	}
 	
 	public String getRelation_name()

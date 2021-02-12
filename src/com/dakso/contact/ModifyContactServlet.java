@@ -13,12 +13,13 @@ import javax.servlet.http.HttpSession;
 
 import com.dakso.contact.service.UserService;
 
-@WebServlet("/ModifyServlet")
-public class ModifyServlet extends HttpServlet {
+@WebServlet("/ModifyContactServlet")
+public class ModifyContactServlet extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
-	
        
-    public ModifyServlet() {
+    public ModifyContactServlet()
+    {
         super();
     }
 
@@ -26,7 +27,6 @@ public class ModifyServlet extends HttpServlet {
 	{
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("id");
-		String name = (String)session.getAttribute("name");
 		
 		if(id == null)
 		{
@@ -37,10 +37,12 @@ public class ModifyServlet extends HttpServlet {
 		{
 			// membervo request에 담아야함
 			UserService m_service = new UserService();
-			UserVO user = m_service.selectByName(id, name);
-			request.setAttribute("user", user);
+			ArrayList<RelationVO> relations = m_service.searchRelationByUserID(id);
+			ContactVO contact = m_service.searchByContactID(request.getParameter("contactid"));
+			request.setAttribute("contact", contact);
+			request.setAttribute("relations", relations);
 			
-			RequestDispatcher disp = request.getRequestDispatcher("inputForm.jsp");
+			RequestDispatcher disp = request.getRequestDispatcher("modifyContactForm.jsp");
 			disp.forward(request, response);	
 		}
 	}

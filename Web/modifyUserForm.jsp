@@ -115,28 +115,12 @@ function addresspopup()
     }).open();
 }
 </script>
-
-<%-- <c:set var="phone1" value="${fn:substring(${user.phone}, 0, 3 ) }">
-</c:set>
-<c:if test="${fn:length(${user.phone })} eq 11">
-	<c:set var="phone2" value="${fn:substring(${user.phone}, 3, 6 ) }">
-	</c:set>
-	<c:set var="phone3" value="${fn:substring(${user.phone}, 7, 10 ) }">
-	</c:set>
-</c:if>
-
-<c:if test="${fn:length(${user.phone })} eq 10">
-	<c:set var="phone2" value="${fn:substring(${user.phone}, 3, 5 ) }">
-	</c:set>
-	<c:set var="phone3" value="${fn:substring(${user.phone}, 6, 9 ) }">
-	</c:set>
-</c:if> --%>
     
 <div class="container">
   <main>
   <div class="col-lg-12">
     <div class="pt-3 text-center">
-    	<h3 class="my-5">회원 가입</h3>
+    	<h3 class="my-5">회원 정보 수정</h3>
 			<!-- <img class="d-block mx-auto mb-4" src="resource/join2.png" alt="" width="128" height="128"> -->
     </div>
 
@@ -146,11 +130,12 @@ function addresspopup()
           <div class="row g-3">
             <div class="col-sm-12">
               <label for="id" class="form-label">ID</label>
-              <label for="id" class="form-label">${user.userid }</label>
+              <%-- <label for="id" class="form-label">${user.userid }</label> --%>
+               <h5 class="mb-2" style=color:#9669f6>${user.userid }</h5>
             </div>
             
             <div class="col-12">
-              <label for="pw" class="form-label">비밀번호</label>
+              <label for="pw" class="form-label">비밀번호 확인</label>
               <div class="input-group">
                 <input type="password" class="form-control" id="pw" placeholder="비밀번호를 입력해 주세요" required>
               <div class="invalid-feedback">
@@ -171,13 +156,13 @@ function addresspopup()
 
             <div class="col-md-4">
               <label for="first_digit" class="form-label">전화번호</label>
-              <select class="form-select" name="select_phone" id="first_digit" "${user.phone1 }" required>
-                <option value="010">010</option>
-                <option value="011">011</option>
-                <option value="016">016</option>
-                <option value="017">017</option>
-                <option value="018">018</option>
-                <option value="019">019</option>
+              <select class="form-select" name="select_phone" id="first_digit" required>
+              	<option value="010" <c:if test="${user.phone1 eq 010}"> selected</c:if>>010</option>
+              	<option value="011" <c:if test="${user.phone1 eq 011}"> selected</c:if>>011</option>
+              	<option value="016" <c:if test="${user.phone1 eq 016}"> selected</c:if>>016</option>
+              	<option value="017" <c:if test="${user.phone1 eq 017}"> selected</c:if>>017</option>
+              	<option value="018" <c:if test="${user.phone1 eq 018}"> selected</c:if>>018</option>
+              	<option value="019" <c:if test="${user.phone1 eq 019}"> selected</c:if>>019</option>
               </select>
             </div>
             
@@ -199,7 +184,7 @@ function addresspopup()
             
             <div class="col-md-2">
             	<label for="postcode" class="form-label">우편번호</label>
-                <input type="text" class="form-control" id="postcode" placeholder="" required>
+                <input type="text" class="form-control" id="postcode" placeholder="" value="${user.zipcode }" required>
               	<div class="invalid-feedback">
                   	주소를 입력해 주세요.
                 </div>
@@ -213,7 +198,7 @@ function addresspopup()
             
             <div class="col-12">
               <label for="address" class="form-label">주소</label>
-                <input type="text" class="form-control" id="address" placeholder="" required>
+                <input type="text" class="form-control" id="address" placeholder="" value="${user.mainaddress }" required>
               <div class="invalid-feedback">
                   	주소를 입력해 주세요.
                 </div>
@@ -221,7 +206,7 @@ function addresspopup()
             
             <div class="col-12">
               <label for="detailAddress" class="form-label">상세 주소</label>
-                <input type="text" class="form-control" id="detailAddress" placeholder="상세주소">
+                <input type="text" class="form-control" id="detailAddress" placeholder="상세주소" value="${user.detailaddress }">
             </div>
             
 

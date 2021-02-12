@@ -1,9 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>회원 가입 페이지</title>
+<title>연락처 추가 페이지</title>
 
 <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/checkout/">
 <link href="bootstrap-5.0/css/bootstrap.min.css" rel="stylesheet">
@@ -20,7 +23,7 @@ label
 }
 body
 {
-	background-image: url("resource/background6.gif");
+	background-image: url("resource/background.gif");
 	background-repeat: no-repeat;
 	background-size: cover;
 }
@@ -44,7 +47,7 @@ body
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
-// 숫자 제외 입력 방지
+//영어와 숫자 입력 방지
 function removeChar(e)
 {
 	var e 			= e || window.event
@@ -57,7 +60,20 @@ function removeChar(e)
 	};
 }
 
-// 주소 입력
+// 그룹 직접 입력
+function showfield(name)
+{
+	if(name=='Other')
+  	{
+		document.getElementById('selfinput').innerHTML='<div class="col-md-6"><label for="group" class="form-label">직접 입력</label><input type="text" class="form-control" id="group" placeholder="" required><div class="invalid-feedback">그룹명을 입력해 주세요.</div></div>';
+  	}
+ 	else
+ 	{
+ 		document.getElementById('selfinput').innerHTML='';
+ 	}
+}
+
+// 주소입력
 function addresspopup()
 {
 	new daum.Postcode(
@@ -116,36 +132,17 @@ function addresspopup()
   <main>
   <div class="col-lg-12">
     <div class="pt-3 text-center">
-    	<h3 class="my-5">회원 가입</h3>
-			<!-- <img class="d-block mx-auto mb-4" src="resource/join2.png" alt="" width="128" height="128"> -->
+    	<h3 class="my-5">연락처 추가</h3>
     </div>
 
-        <h4 class="mb-2" style=color:#9669f6>정보 입력</h4>
+        <h4 class="mb-2" style=color:#9669f6>연락처 수정</h4>
         
-        <form class="needs-validation" action="JoinServlet" method="post" novalidate>
+        <form class="needs-validation" action="/insert.do" method="post" novalidate>
           <div class="row g-3">
-            <div class="col-sm-12">
-              <label for="id" class="form-label">ID</label>
-              <input type="text" class="form-control" id="id" placeholder="아이디를 입력해 주세요" value="" required>
-              <div class="invalid-feedback">
-                	ID를 입력해 주세요.
-              </div>
-            </div>
-            
             <div class="col-12">
-              <label for="pw" class="form-label">비밀번호</label>
+              <label for="name" class="form-label">이름</label>
               <div class="input-group">
-                <input type="password" class="form-control" id="pw" placeholder="비밀번호를 입력해 주세요" required>
-              <div class="invalid-feedback">
-                  	비밀번호를 입력해 주세요.
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="username" class="form-label">이름</label>
-              <div class="input-group">
-                <input type="text" class="form-control" id="username" placeholder="이름을 입력해 주세요" required>
+                <input type="text" class="form-control" id="name" placeholder="이름을 입력해 주세요" value="${contact.name }" required>
               <div class="invalid-feedback">
                   	이름을 입력해 주세요.
                 </div>
@@ -155,61 +152,59 @@ function addresspopup()
             <div class="col-md-4">
               <label for="first_digit" class="form-label">전화번호</label>
               <select class="form-select" id="first_digit" required>
-                <option value="010">010</option>
-                <option value="011">011</option>
-                <option value="016">016</option>
-                <option value="017">017</option>
-                <option value="018">018</option>
-                <option value="019">019</option>
+                <option value="010" <c:if test="${contact.phone1 eq 010}"> selected</c:if>>010</option>
+              	<option value="011" <c:if test="${contact.phone1 eq 011}"> selected</c:if>>011</option>
+              	<option value="016" <c:if test="${contact.phone1 eq 016}"> selected</c:if>>016</option>
+              	<option value="017" <c:if test="${contact.phone1 eq 017}"> selected</c:if>>017</option>
+              	<option value="018" <c:if test="${contact.phone1 eq 018}"> selected</c:if>>018</option>
+              	<option value="019" <c:if test="${contact.phone1 eq 019}"> selected</c:if>>019</option>
               </select>
             </div>
             
             <div class="col-sm-4">
              <label class="pt-4"></label>
-              <input type="text" class="form-control" id="second_digit" placeholder="" value="" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+             <div class="input-group">
+              <input type="text" class="form-control" id="second_digit" placeholder="" value="${contact.phone2}" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
-              	전화번호를 올바르게 입력해 주세요.
+              	전화번호를 입력해 주세요.
+              </div>
               </div>
             </div>
             
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
-	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
+	            <div class="input-group">
+	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="${contact.phone3}" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
 	            	<div class="invalid-feedback">
-	              		전화번호를 올바르게 입력해 주세요.
+	              		전화번호를 입력해 주세요.
 	            	</div>
+	            </div>
             </div>
-            
-            <div class="col-md-2">
-            	<label for="postcode" class="form-label">우편번호</label>
-                <input type="text" class="form-control" id="postcode" placeholder="" required>
-              	<div class="invalid-feedback">
-                  	주소를 입력해 주세요.
-                </div>
-            </div>
-            <div class="col-sm-4">
-            <label class="pt-1"></label>
-            	<div class="py-2">
-	      			<button class="w-80 btn btn-primary btn-MD" onclick="addresspopup()">우편번호 찾기</button>
-	      		</div>
-            </div>
-            
+<div class="col-sm-12"></div>
+<div class="col-md-4">
+
+	<label for="first_digit" class="form-label">그룹 선택</label>
+<select class="form-select" name="travel_arriveVia" id="group" onchange="showfield(this.options[this.selectedIndex].value)" required>
+	<option selected="selected">그룹을 선택해 주세요</option>
+	<option value="Other">직접 입력</option>
+	
+	<c:forEach items="${relations}" var="relation" >
+		<option value="${relation.relation_name }" <c:if test="${relation.relation_name eq contact.relation_name}">selected</c:if>>${relation.relation_name }</option>
+	</c:forEach>
+</select>
+</div>
+<div class="col-md-8" id="selfinput"></div>
+
             <div class="col-12">
-              <label for="address" class="form-label">주소</label>
-                <input type="text" class="form-control" id="address" placeholder="" required>
-              <div class="invalid-feedback">
-                  	주소를 입력해 주세요.
-                </div>
-            </div>
-            
-            <div class="col-12">
-              <label for="detailAddress" class="form-label">상세 주소</label>
-                <input type="text" class="form-control" id="detailAddress" placeholder="상세주소">
+              <label for="memo" class="form-label">메모</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="memo" value="${contact.memo }">
+              </div>
             </div>
             
 
           <div class="my-4">
-          	<button class="w-100 btn btn-primary btn-lg" type="submit">가입하기</button>
+          	<button class="w-100 btn btn-primary btn-lg" type="submit">추가 하기</button>
           </div>
           </div>
         </form>

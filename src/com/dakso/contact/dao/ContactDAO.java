@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.dakso.contact.ContactVO;
+import com.dakso.contact.RelationVO;
 import com.dakso.contact.UserVO;
 
 public class ContactDAO
 {
-	public int addMember(UserVO member)
+	public int addUser(UserVO member)
 	{
 		int result = 0;
 		
@@ -203,6 +204,7 @@ public class ContactDAO
 		return result;
 	}
 	
+	//////////////////////////// contact 
 	public ArrayList<ContactVO> showAll(String userID)
 	{
 		ArrayList<ContactVO> result = new ArrayList<ContactVO>();
@@ -212,10 +214,10 @@ public class ContactDAO
 		ResultSet rs 			= null;
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("select c.memberid						");
+		sql.append("select c.contactid						");
 		sql.append("	 , c.name							");
 		sql.append("	 , c.phone							");
-		sql.append("	 , c.address						");
+		sql.append("	 , c.memo							");
 		sql.append("	 , r.relation_name					");
 		sql.append("	 , i.userid							");
 		sql.append("  from contactlist c					");
@@ -223,17 +225,16 @@ public class ContactDAO
 		sql.append("    on c.userid = i.userid				");
 		sql.append(" inner JOIN relation r					");
 		sql.append("    on c.relation_key = r.relation_key	");
-		
+
 		try
 		{
 			pstmt = conn.prepareStatement(sql.toString());
-			
 			rs = pstmt.executeQuery();
 			
 			while(rs.next())
 			{
-				ContactVO contact = new ContactVO(rs.getInt("memberid"), rs.getString("name"), rs.getString("phone")
-												, rs.getString("address"), rs.getString("relation_name")
+				ContactVO contact = new ContactVO(rs.getInt("contactid"), rs.getString("name"), rs.getString("phone")
+												, rs.getString("memo"), rs.getString("relation_name")
 												, rs.getString("userid"));
 				
 				result.add(contact);
@@ -245,7 +246,7 @@ public class ContactDAO
 		}
 		catch (SQLException e)
 		{
-			Logger.getGlobal().warning("연락처 검색중 문제가 발생하였습니다" + e.getMessage());
+			Logger.getGlobal().warning("연락처 검색중 문제가 발생하였습니다. " + e.getMessage());
 		}
 		finally
 		{
@@ -262,12 +263,12 @@ public class ContactDAO
 		Connection conn = ConnectionManager.getInstance().getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs 			= null;
-		
+
 		StringBuilder sql = new StringBuilder();
-		sql.append("select c.memberid						");
+		sql.append("select c.contactid						");
 		sql.append("	 , c.name							");
 		sql.append("	 , c.phone							");
-		sql.append("	 , c.address						");
+		sql.append("	 , c.memo							");
 		sql.append("	 , r.relation_name					");
 		sql.append("	 , r.relation_key					");
 		sql.append("	 , i.userid							");
@@ -282,13 +283,13 @@ public class ContactDAO
 			pstmt = conn.prepareStatement(sql.toString());
 			
 			rs = pstmt.executeQuery();
-			
+
 			while(rs.next())
 			{
-				ContactVO contact = new ContactVO(rs.getInt("memberid"), rs.getString("name"), rs.getString("phone")
-												, rs.getString("address"), rs.getString("relation_name")
+				ContactVO contact = new ContactVO(rs.getInt("contactid"), rs.getString("name"), rs.getString("phone")
+												, rs.getString("memo"), rs.getString("relation_name")
 												, rs.getString("userid"));
-				
+
 				result.add(contact);
 			}
 		}
@@ -319,7 +320,7 @@ public class ContactDAO
 		
 		// 회원번호는 가장큰수를 select하여 거기에 +1로 지정
 		sql.append("INSERT INTO CONTACTLIST														");
-		sql.append("VALUES( (SELECT NVL(MAX(memberid) + 1, 1)									"); 
+		sql.append("VALUES( (SELECT NVL(MAX(contactid) + 1, 1)									"); 
 		sql.append("		  FROM CONTACTLIST), ? , ? , ? , ? , TO_CHAR(SYSDATE, 'YYYYMMDD'))	");
 
 		try
@@ -327,7 +328,7 @@ public class ContactDAO
 			pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, contact.getName());
 			pstmt.setString(2, contact.getPhone());
-			pstmt.setString(3, contact.getAddress());
+			pstmt.setString(3, contact.getMemo());
 			pstmt.setString(3, contact.getRelation_name());
 			
 			result = pstmt.executeUpdate();
@@ -360,6 +361,60 @@ public class ContactDAO
 		return result;
 	}
 	
+	public ContactVO searchByContactID(String contactID )
+	{
+		ContactVO result = null;
+		
+		Connection conn = ConnectionManager.getInstance().getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs 			= null;
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("select c.contactid						");
+		sql.append("	 , c.name							");
+		sql.append("	 , c.phone							");
+		sql.append("	 , c.memo							");
+		sql.append("	 , r.relation_name					");
+		sql.append("	 , r.relation_key					");
+		sql.append("	 , i.userid							");
+		sql.append("  from contactlist c					");
+		sql.append(" inner join userinfo i					");
+		sql.append("    on c.userid = i.userid				");
+		sql.append(" inner JOIN relation r					");
+		sql.append("    on c.relation_key = r.relation_key	");
+		sql.append(" where c.contactid = ?					");
+		
+		try
+		{
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, contactID);
+			rs = pstmt.executeQuery();
+
+			while(rs.next())
+			{
+				result = new ContactVO(rs.getInt("contactid"), rs.getString("name"), rs.getString("phone")
+												, rs.getString("memo"), rs.getString("relation_name")
+												, rs.getString("userid"));
+			}
+		}
+		catch (SQLTimeoutException e)
+		{
+			Logger.getGlobal().warning("TimeOut Exception 발생");
+		}
+		catch (SQLException e)
+		{
+			Logger.getGlobal().warning("연락처 검색 도중 문제가 발생하였습니다." + e.getMessage());
+		}
+		finally
+		{
+			ConnectionManager.getInstance().close(conn, pstmt, rs);
+		}
+		
+		return result;
+	}
+	////////////////////////////////// end contact
+	
+	//////////////////////// relation
 	public int addRelation(String relation_name, String userID)
 	{
 		int result = 0;
@@ -410,4 +465,50 @@ public class ContactDAO
 		
 		return result;
 	}
+	
+	public ArrayList<RelationVO> searchRelationByUserID(String userID )
+	{
+		ArrayList<RelationVO> result = new ArrayList<RelationVO>();
+		
+		Connection conn = ConnectionManager.getInstance().getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs 			= null;
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("select relation_key		");
+		sql.append("     , relation_name	");
+		sql.append("     , userid			");
+		sql.append("  from relation			");
+		sql.append(" where userid = ? 		");
+		
+		try
+		{
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, userID);
+			rs = pstmt.executeQuery();
+
+			while(rs.next())
+			{
+				 RelationVO relation = new RelationVO(rs.getString("relation_key"), rs.getString("relation_name"), rs.getString("userid"));
+				 
+				 result.add(relation);
+			}
+		}
+		catch (SQLTimeoutException e)
+		{
+			Logger.getGlobal().warning("TimeOut Exception 발생");
+		}
+		catch (SQLException e)
+		{
+			Logger.getGlobal().warning("그룹 검색 도중 문제가 발생하였습니다." + e.getMessage());
+		}
+		finally
+		{
+			ConnectionManager.getInstance().close(conn, pstmt, rs);
+		}
+		
+		return result;
+	}
+	
+	////////////////////////////////////////// end relation
 }

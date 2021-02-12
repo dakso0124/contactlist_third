@@ -2,32 +2,32 @@ package com.dakso.contact;
 
 public class ContactVO
 {
-	private int    memberID;		// unique
+	private int    contactID;		// unique
 	private String name;			// Not Null
 	private String phone;			// pk
-	private String address;
+	private String memo;
 	private String relation_name;	// not null
 	private String userid;
 	
-	public ContactVO(int memberId, String name, String phone, String address, 
+	public ContactVO(int memberId, String name, String phone, String memo, 
 					 String relation_name, String userID)
 	{
-		this.memberID = memberId;
+		this.contactID = memberId;
 		this.name = name;
 		this.phone = phone;
-		this.address = address;
+		this.memo = memo;
 		this.relation_name = relation_name;
 		this.userid = userID;
 	}
 	
-	public int getMemberID()
+	public int getContactID()
 	{
-		return memberID;
+		return contactID;
 	}
 	
-	public void setMemberID(int memberID)
+	public void setContactID(int contactID)
 	{
-		this.memberID = memberID;
+		this.contactID = contactID;
 	}
 	
 	public String getName()
@@ -45,19 +45,41 @@ public class ContactVO
 		return phone;
 	}
 	
+	public String getPhone1()
+	{
+		return phone.substring(0, 3);
+	}
+	
+	public String getPhone2()
+	{
+		if(phone.length() == 11)
+		{
+			return phone.substring(3, 7);
+		}
+		else
+		{
+			return phone.substring(3, 6);
+		}
+	}
+	
+	public String getPhone3()
+	{
+		return phone.substring(phone.length() - 4);
+	}
+	
 	public void setPhone(String phone)
 	{
 		this.phone = phone;
 	}
 	
-	public String getAddress()
+	public String getMemo()
 	{
-		return address;
+		return memo;
 	}
 	
-	public void setAddress(String address)
+	public void setMemo(String memo)
 	{
-		this.address = address;
+		this.memo = memo;
 	}
 	
 	public String getRelation_name()

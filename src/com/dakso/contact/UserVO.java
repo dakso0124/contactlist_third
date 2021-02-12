@@ -1,6 +1,6 @@
 package com.dakso.contact;
 
-public class MemberVO
+public class UserVO
 {
 	private String userid;
 	private String password;
@@ -8,7 +8,21 @@ public class MemberVO
 	private String phone;
 	private String address;
 	private String join_date;
-	private char   gender;
+	
+	public UserVO()
+	{
+		
+	}
+	
+	public UserVO(String userid, String password, String name, String phone, String address, String join_date)
+	{
+		this.userid = userid;
+		this.password = password;
+		this.name = name;
+		this.phone = phone;
+		this.address = address;
+		this.join_date = join_date;
+	}
 	
 	public String getUserid()
 	{
@@ -45,6 +59,28 @@ public class MemberVO
 		return phone;
 	}
 	
+	public String getPhone1()
+	{
+		return phone.substring(0, 3);
+	}
+	
+	public String getPhone2()
+	{
+		if(phone.length() == 11)
+		{
+			return phone.substring(3, 7);
+		}
+		else
+		{
+			return phone.substring(3, 6);
+		}
+	}
+	
+	public String getPhone3()
+	{
+		return phone.substring(phone.length() - 4);
+	}
+	
 	public void setPhone(String phone)
 	{
 		this.phone = phone;
@@ -68,15 +104,5 @@ public class MemberVO
 	public void setJoin_date(String join_date)
 	{
 		this.join_date = join_date;
-	}
-	
-	public char getGender()
-	{
-		return gender;
-	}
-	
-	public void setGender(char gender)
-	{
-		this.gender = gender;
 	}
 }

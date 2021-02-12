@@ -5,8 +5,20 @@ public class ContactVO
 	private int    memberID;		// unique
 	private String name;			// Not Null
 	private String phone;			// pk
-	private String relation_type;	// fk
+	private String address;
 	private String relation_name;	// not null
+	private String userid;
+	
+	public ContactVO(int memberId, String name, String phone, String address, 
+					 String relation_name, String userID)
+	{
+		this.memberID = memberId;
+		this.name = name;
+		this.phone = phone;
+		this.address = address;
+		this.relation_name = relation_name;
+		this.userid = userID;
+	}
 	
 	public int getMemberID()
 	{
@@ -38,14 +50,14 @@ public class ContactVO
 		this.phone = phone;
 	}
 	
-	public String getRelation_type()
+	public String getAddress()
 	{
-		return relation_type;
+		return address;
 	}
 	
-	public void setRelation_type(String relation_type)
+	public void setAddress(String address)
 	{
-		this.relation_type = relation_type;
+		this.address = address;
 	}
 	
 	public String getRelation_name()
@@ -56,5 +68,15 @@ public class ContactVO
 	public void setRelation_name(String relation_name)
 	{
 		this.relation_name = relation_name;
+	}
+	
+	public String getUserid()
+	{
+		return userid;
+	}
+	
+	public void setUserid(String userid)
+	{
+		this.userid = userid;
 	}
 }

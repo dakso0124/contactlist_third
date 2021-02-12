@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>메인 페이지</title>
 
 <style>
 	body
@@ -41,17 +41,21 @@ function movedelete()
 <body class="text-center">
 
 <header>
+<form action="ModifyServlet">
 	<div>
 		<button class="w-100 btn btn-md btn-primary" type="submit">정보수정</button>
 	</div>
+</form>
+<form action="LogoutServlet">
 	<div>
-		<button class="w-100 btn btn-md btn-primary" type="submit" disabled>로그아웃</button>
+		<button class="w-100 btn btn-md btn-primary" type="submit">로그아웃</button>
 	</div>
+</form>
 </header>
 
-		<h1 style="color: #81F5D8" class="my-5">메인 페이지</h1>
+		<h1 style="color: #81F5D8" class="my-5">연락처 목록</h1>
 
-<h1><span class="blue">&lt;</span>님<span class="blue">&gt;</span> <span class="yellow">안녕하세요 :D</pan></h1>
+<h1><span class="blue">&lt;</span>${name }님<span class="blue">&gt;</span> <span class="yellow">안녕하세요 :D</pan></h1>
 <h2>Edit by <a href="https://github.com/dakso0124" target="_blank">Dakso</a></h2>
 
 <div style="height: 600px;overflow-y: auto;">
@@ -61,15 +65,23 @@ function movedelete()
 			<th><h1>이름</h1></th>
 			<th><h1>전화번호</h1></th>
 			<th><h1>주소</h1></th>
-			<th><h1>성별</h1></th>
+			<th><h1>그룹</h1></th>
 			<th><h1>수정</h1></th>
 			<th><h1>삭제</h1></th>
 		</tr>
 	</thead>
-	<%-- <c:forEach items="" var="" step="" >
-	</c:forEach> --%>
 	<tbody>
-		<tr>
+		<c:forEach items="${list}" var="contact" >
+			<tr>
+				<td>${contact.name }</td>
+				<td>${contact.phone }</td>
+				<td>${contact.address }</td>
+				<td>${contact.relation_name }</td>
+				<td><button class="transparent_button" onclick="moveedit()"><img src="resource/edit.png" alt="" width="30"></button></td>
+				<td><button class="transparent_button" onclick="movedelete()"><img src="resource/delete.png" alt="" width="30"></button></td>
+			</tr>
+		</c:forEach>
+		<!-- <tr>
 			<td>정재겸</td>
 			<td>010-2470-2307</td>
 			<td>경기도 성남시 수정구 복정동 702-10 202호 </td>
@@ -156,7 +168,7 @@ function movedelete()
 			<td>00:31:52</td>
 			<td><button class="transparent_button" onclick="moveedit()"><img src="resource/edit.png" alt="" width="30"></button></td>
 			<td><button class="transparent_button" onclick="movedelete()"><img src="resource/delete.png" alt="" width="30"></button></td>
-		</tr>
+		</tr> -->
 	</tbody>
 </table>
 </div>

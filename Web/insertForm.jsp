@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>연락처 추가</title>
+<title>연락처 추가 페이지</title>
 
 <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/checkout/">
 <link href="bootstrap-5.0/css/bootstrap.min.css" rel="stylesheet">
@@ -135,9 +135,9 @@ function addresspopup()
     	<h3 class="my-5">연락처 추가</h3>
     </div>
 
-        <h4 class="mb-2" style=color:#9669f6>정보 입력</h4>
+        <h4 class="mb-2" style=color:#9669f6>연락처 입력</h4>
         
-        <form class="needs-validation" action="JoinServlet" method="post" novalidate>
+        <form class="needs-validation" action="/insert.do" method="post" novalidate>
           <div class="row g-3">
             <div class="col-12">
               <label for="username" class="form-label">이름</label>

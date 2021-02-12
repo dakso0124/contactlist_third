@@ -1,9 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>회원 가입 페이지</title>
+<title>회원 정보 수정 페이지</title>
 
 <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/checkout/">
 <link href="bootstrap-5.0/css/bootstrap.min.css" rel="stylesheet">
@@ -110,6 +115,22 @@ function addresspopup()
     }).open();
 }
 </script>
+
+<%-- <c:set var="phone1" value="${fn:substring(${user.phone}, 0, 3 ) }">
+</c:set>
+<c:if test="${fn:length(${user.phone })} eq 11">
+	<c:set var="phone2" value="${fn:substring(${user.phone}, 3, 6 ) }">
+	</c:set>
+	<c:set var="phone3" value="${fn:substring(${user.phone}, 7, 10 ) }">
+	</c:set>
+</c:if>
+
+<c:if test="${fn:length(${user.phone })} eq 10">
+	<c:set var="phone2" value="${fn:substring(${user.phone}, 3, 5 ) }">
+	</c:set>
+	<c:set var="phone3" value="${fn:substring(${user.phone}, 6, 9 ) }">
+	</c:set>
+</c:if> --%>
     
 <div class="container">
   <main>
@@ -121,14 +142,11 @@ function addresspopup()
 
         <h4 class="mb-2" style=color:#9669f6>정보 입력</h4>
         
-        <form class="needs-validation" action="JoinServlet" method="post" novalidate>
+        <form class="needs-validation" action="ModifyServlet" method="post" novalidate>
           <div class="row g-3">
             <div class="col-sm-12">
               <label for="id" class="form-label">ID</label>
-              <input type="text" class="form-control" id="id" placeholder="아이디를 입력해 주세요" value="" required>
-              <div class="invalid-feedback">
-                	ID를 입력해 주세요.
-              </div>
+              <label for="id" class="form-label">${user.userid }</label>
             </div>
             
             <div class="col-12">
@@ -144,16 +162,16 @@ function addresspopup()
             <div class="col-12">
               <label for="username" class="form-label">이름</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="username" placeholder="이름을 입력해 주세요" required>
+                <input type="text" class="form-control" id="username" placeholder="이름을 입력해 주세요" value="${user.name }" required>
               <div class="invalid-feedback">
                   	이름을 입력해 주세요.
                 </div>
               </div>
             </div>
-            
+
             <div class="col-md-4">
               <label for="first_digit" class="form-label">전화번호</label>
-              <select class="form-select" id="first_digit" required>
+              <select class="form-select" name="select_phone" id="first_digit" "${user.phone1 }" required>
                 <option value="010">010</option>
                 <option value="011">011</option>
                 <option value="016">016</option>
@@ -165,7 +183,7 @@ function addresspopup()
             
             <div class="col-sm-4">
              <label class="pt-4"></label>
-              <input type="text" class="form-control" id="second_digit" placeholder="" value="" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+              <input type="text" class="form-control" id="second_digit" placeholder="" value="${user.phone2 }" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
               	전화번호를 올바르게 입력해 주세요.
               </div>
@@ -173,7 +191,7 @@ function addresspopup()
             
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
-	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
+	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="${user.phone3 }" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
 	            	<div class="invalid-feedback">
 	              		전화번호를 올바르게 입력해 주세요.
 	            	</div>

@@ -4,6 +4,7 @@ public class RelationVO
 {
 	private String realation_type;
 	private String relation_name;
+	private String userid;
 	
 	public RelationVO()
 	{
@@ -35,5 +36,15 @@ public class RelationVO
 	public void setRealation_type(String realation_type)
 	{
 		this.realation_type = realation_type;
+	}
+	
+	public String getUserid()
+	{
+		return userid;
+	}
+
+	public void setUserid(String userid)
+	{
+		this.userid = userid;
 	}
 }

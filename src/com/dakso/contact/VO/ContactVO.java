@@ -7,15 +7,33 @@ public class ContactVO
 	private String phone;			// pk
 	private String memo;
 	private String relation_name;	// not null
+	private String relation_key;	// not null
 	private String userid;
 	
-	public ContactVO(int memberId, String name, String phone, String memo, 
+	public ContactVO()
+	{
+		
+	}
+	
+	public ContactVO(int memberId, String name, String phone, String memo, String relation_key,
 					 String relation_name, String userID)
 	{
 		this.contactID = memberId;
 		this.name = name;
 		this.phone = phone;
 		this.memo = memo;
+		this.relation_key = relation_key;
+		this.relation_name = relation_name;
+		this.userid = userID;
+	}
+	
+	public ContactVO(String name, String phone, String memo, String relation_key,
+			 String relation_name, String userID)
+	{
+		this.name = name;
+		this.phone = phone;
+		this.memo = memo;
+		this.relation_key = relation_key;
 		this.relation_name = relation_name;
 		this.userid = userID;
 	}
@@ -80,6 +98,16 @@ public class ContactVO
 	public void setMemo(String memo)
 	{
 		this.memo = memo;
+	}
+	
+	public String getRealation_key()
+	{
+		return relation_key;
+	}
+	
+	public void setRealation_key(String realation_key)
+	{
+		this.relation_key = realation_key;
 	}
 	
 	public String getRelation_name()

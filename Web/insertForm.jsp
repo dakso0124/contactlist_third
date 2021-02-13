@@ -65,7 +65,7 @@ function showfield(name)
 {
 	if(name=='Other')
   	{
-		document.getElementById('selfinput').innerHTML='<div class="col-md-6"><label for="group" class="form-label">직접 입력</label><input type="text" class="form-control" id="group" placeholder="" required><div class="invalid-feedback">그룹명을 입력해 주세요.</div></div>';
+		document.getElementById('selfinput').innerHTML='<div class="col-md-6"><label for="relation_name" class="form-label">직접 입력</label><input type="text" class="form-control" id="relation_name" name="relation_name" required><div class="invalid-feedback">그룹명을 입력해 주세요.</div></div>';
   	}
  	else
  	{
@@ -83,12 +83,12 @@ function showfield(name)
 
         <h4 class="mb-2" style=color:#9669f6>연락처 입력</h4>
         
-        <form class="needs-validation" action="/insert.do" method="post" novalidate>
+        <form class="needs-validation" action="InsertContactServlet" method="post" novalidate>
           <div class="row g-3">
             <div class="col-12">
-              <label for="username" class="form-label">이름</label>
+              <label for="name" class="form-label">이름</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="username" placeholder="이름을 입력해 주세요" required>
+                <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력해 주세요" required>
               <div class="invalid-feedback">
                   	이름을 입력해 주세요.
                 </div>
@@ -97,7 +97,7 @@ function showfield(name)
             
             <div class="col-md-4">
               <label for="first_digit" class="form-label">전화번호</label>
-              <select class="form-select" id="first_digit" required>
+              <select class="form-select" id="first_digit" name="first_digit" required>
                 <option value="010">010</option>
                 <option value="011">011</option>
                 <option value="016">016</option>
@@ -110,7 +110,7 @@ function showfield(name)
             <div class="col-sm-4">
              <label class="pt-4"></label>
              <div class="input-group">
-              <input type="text" class="form-control" id="second_digit" placeholder="" value="" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+              <input type="text" class="form-control" id="second_digit" name="second_digit" value="" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
               	전화번호를 입력해 주세요.
               </div>
@@ -120,7 +120,7 @@ function showfield(name)
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
 	            <div class="input-group">
-	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
+	            	<input type="tel" class="form-control" id="third_digit" name="third_digit" value="" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
 	            	<div class="invalid-feedback">
 	              		전화번호를 입력해 주세요.
 	            	</div>
@@ -129,18 +129,21 @@ function showfield(name)
 <div class="col-sm-12"></div>
 <div class="col-md-4">
 
-	<label for="first_digit" class="form-label">그룹 선택</label>
-	<select class="form-select" name="travel_arriveVia" id="group" onchange="showfield(this.options[this.selectedIndex].value)" required>
-		<option selected="selected">그룹을 선택해 주세요</option>
-		<option value="Other">직접 입력</option>
-	</select>
+	<label for="group" class="form-label">그룹 선택</label>
+<select class="form-select" name="group" id="group" onchange="showfield(this.options[this.selectedIndex].value)" required>
+	<option selected="selected">그룹을 선택해 주세요</option>
+	<option value="Other">직접 입력</option>
+	<c:forEach items="${relations}" var="relation" >
+		<option value="${relation.relation_name }" <c:if test="${relation.relation_name eq contact.relation_name}">selected</c:if>>${relation.relation_name }</option>
+	</c:forEach>
+</select>
 </div>
 <div class="col-md-8" id="selfinput"></div>
 
             <div class="col-12">
               <label for="memo" class="form-label">메모</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="memo">
+                <input type="text" class="form-control" id="memo" name="memo">
               </div>
             </div>
 

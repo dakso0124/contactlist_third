@@ -2,7 +2,7 @@ package com.dakso.contact.VO;
 
 public class RelationVO
 {
-	private String realation_type;
+	private String relation_key;
 	private String relation_name;
 	private String userid;
 	
@@ -11,9 +11,9 @@ public class RelationVO
 		
 	}
 	
-	public RelationVO(String relation_type, String relation_name, String userid)
+	public RelationVO(String realation_key, String relation_name, String userid)
 	{
-		this.realation_type = relation_type;
+		this.relation_key = realation_key;
 		this.relation_name = relation_name;
 		this.userid = userid;
 	}
@@ -28,14 +28,14 @@ public class RelationVO
 		this.relation_name = relation_name;
 	}
 	
-	public String getRealation_type()
+	public String getRealation_key()
 	{
-		return realation_type;
+		return relation_key;
 	}
 	
-	public void setRealation_type(String realation_type)
+	public void setRealation_key(String realation_key)
 	{
-		this.realation_type = realation_type;
+		this.relation_key = realation_key;
 	}
 	
 	public String getUserid()

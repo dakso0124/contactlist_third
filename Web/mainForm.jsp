@@ -53,10 +53,15 @@ function movedelete(id)
 </form>
 </header>
 
-		<h1 style="color: #81F5D8" class="my-5">연락처 목록</h1>
+<h1 style="color: #81F5D8" class="my-5">연락처 목록</h1>
+<form action="InsertContactServlet">
+<h1><span class="blue">&lt;</span>${name }님<span class="blue">&gt;</span> <span class="yellow">안녕하세요 :D</span>
 
-<h1><span class="blue">&lt;</span>${name }님<span class="blue">&gt;</span> <span class="yellow">안녕하세요 :D</pan></h1>
+<span class="col-sm-3"><button class="w-40 h-50 btn btn-md btn-primary" type="submit">연락처 추가</button></span>
+</h1></form>
 <h2>Edit by <a href="https://github.com/dakso0124" target="_blank">Dakso</a></h2>
+
+
 
 <div style="height: 600px;overflow-y: auto;">
 <table class="container">

@@ -28,6 +28,11 @@ public class UserService
 		return m_dao.searchByContactID(contactID);
 	}
 	
+	public int insertContact(ContactVO contact, String userID)
+	{
+		return m_dao.insertContact(contact, userID);
+	}
+	
 	public int deleteContact(String contactID)
 	{
 		return m_dao.deleteContact(contactID);
@@ -60,6 +65,16 @@ public class UserService
 	public ArrayList<RelationVO> searchRelationByUserID(String userID )
 	{
 		return m_dao.searchRelationByUserID(userID);
+	}
+	
+	public int addRelation(String relation_name, String userID)
+	{
+		return m_dao.addRelation(relation_name, userID);
+	}
+	
+	public RelationVO searchRelationByName(String relation_name, String userID)
+	{
+		return m_dao.searchRelationByName(relation_name, userID);
 	}
 	////////////////////////////////////////////////////////////////////////
 }

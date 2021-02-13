@@ -1,4 +1,4 @@
-package com.dakso.contact;
+package com.dakso.contact.VO;
 
 public class ContactVO
 {

@@ -32,7 +32,7 @@ function moveedit(id)
 
 function movedelete(id)
 {
-	location.href = "ModifyContactServlet?contactid=" + id;
+	location.href = "DeleteContactServlet?contactid=" + id;
 }
 </script>
 

@@ -8,9 +8,9 @@ import java.sql.SQLTimeoutException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import com.dakso.contact.ContactVO;
-import com.dakso.contact.RelationVO;
-import com.dakso.contact.UserVO;
+import com.dakso.contact.VO.ContactVO;
+import com.dakso.contact.VO.RelationVO;
+import com.dakso.contact.VO.UserVO;
 
 public class ContactDAO
 {
@@ -34,6 +34,52 @@ public class ContactDAO
 			pstmt.setString(3, member.getName());
 			pstmt.setString(4, member.getPhone());
 			pstmt.setString(5, member.getAddress());
+			
+			result = pstmt.executeUpdate();
+		}
+		catch (SQLTimeoutException e)
+		{
+			System.out.println("TimeOut Exception");
+		}
+		catch (SQLException e)
+		{
+			if(e.getMessage().contains("value too large"))	// value overflow
+			{
+				
+			}
+			else
+			{
+				Logger.getGlobal().warning("연락처 추가 도중 문제가 발생하였습니다." + e.getMessage());	
+			}
+		}
+		finally
+		{
+			ConnectionManager.getInstance().close(conn, pstmt, null);
+		}
+		
+		return result;
+	}
+	
+	public int updateUser(UserVO member)
+	{
+		int result = 0;
+		
+		Connection conn = ConnectionManager.getInstance().getConnection();
+		PreparedStatement pstmt = null;
+
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("update userinfo		");
+		sql.append("   set name = ?		");
+		sql.append("     , phone = ?	");
+		sql.append("     , address = ?	");
+		
+		try
+		{
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, member.getName());
+			pstmt.setString(2, member.getPhone());
+			pstmt.setString(3, member.getAddress());
 			
 			result = pstmt.executeUpdate();
 		}
@@ -205,6 +251,7 @@ public class ContactDAO
 	}
 	
 	//////////////////////////// contact 
+	// 모든 연락처 보기
 	public ArrayList<ContactVO> showAll(String userID)
 	{
 		ArrayList<ContactVO> result = new ArrayList<ContactVO>();
@@ -256,6 +303,7 @@ public class ContactDAO
 		return result;
 	}
 	
+	// 이름으로 검색
 	public ArrayList<ContactVO> searchByName(String userID, String name)
 	{
 		ArrayList<ContactVO> result = new ArrayList<ContactVO>();
@@ -309,58 +357,7 @@ public class ContactDAO
 		return result;
 	}
 	
-	public int insertContact(ContactVO contact, String userID)
-	{
-		int result = 0;
-		
-		Connection conn = ConnectionManager.getInstance().getConnection();
-		PreparedStatement pstmt = null;
-
-		StringBuilder sql = new StringBuilder();
-		
-		// 회원번호는 가장큰수를 select하여 거기에 +1로 지정
-		sql.append("INSERT INTO CONTACTLIST														");
-		sql.append("VALUES( (SELECT NVL(MAX(contactid) + 1, 1)									"); 
-		sql.append("		  FROM CONTACTLIST), ? , ? , ? , ? , TO_CHAR(SYSDATE, 'YYYYMMDD'))	");
-
-		try
-		{
-			pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setString(1, contact.getName());
-			pstmt.setString(2, contact.getPhone());
-			pstmt.setString(3, contact.getMemo());
-			pstmt.setString(3, contact.getRelation_name());
-			
-			result = pstmt.executeUpdate();
-			
-			if(result > 0)
-			{
-				result = 1;
-			}
-		}
-		catch (SQLTimeoutException e)
-		{
-			System.out.println("TimeOut Exception");
-		}
-		catch (SQLException e)
-		{
-			if(e.getMessage().contains("value too large"))	// value overflow
-			{
-				result = -1;
-			}
-			else
-			{
-				Logger.getGlobal().warning("연락처 추가 도중 문제가 발생하였습니다." + e.getMessage());	
-			}
-		}
-		finally
-		{
-			ConnectionManager.getInstance().close(conn, pstmt, null);
-		}
-		
-		return result;
-	}
-	
+	// contactid로 연락처 검색 ( 수정 )
 	public ContactVO searchByContactID(String contactID )
 	{
 		ContactVO result = null;
@@ -408,6 +405,92 @@ public class ContactDAO
 		finally
 		{
 			ConnectionManager.getInstance().close(conn, pstmt, rs);
+		}
+		
+		return result;
+	}
+	
+	// 연락처 추가
+		public int insertContact(ContactVO contact, String userID)
+		{
+			int result = 0;
+			
+			Connection conn = ConnectionManager.getInstance().getConnection();
+			PreparedStatement pstmt = null;
+
+			StringBuilder sql = new StringBuilder();
+			
+			// 회원번호는 가장큰수를 select하여 거기에 +1로 지정
+			sql.append("INSERT INTO CONTACTLIST														");
+			sql.append("VALUES( (SELECT NVL(MAX(contactid) + 1, 1)									"); 
+			sql.append("		  FROM CONTACTLIST), ? , ? , ? , ? , TO_CHAR(SYSDATE, 'YYYYMMDD'))	");
+
+			try
+			{
+				pstmt = conn.prepareStatement(sql.toString());
+				pstmt.setString(1, contact.getName());
+				pstmt.setString(2, contact.getPhone());
+				pstmt.setString(3, contact.getMemo());
+				pstmt.setString(3, contact.getRelation_name());
+				
+				result = pstmt.executeUpdate();
+				
+				/*
+				 * if(result > 0) { result = 1; }
+				 */
+			}
+			catch (SQLTimeoutException e)
+			{
+				System.out.println("TimeOut Exception");
+			}
+			catch (SQLException e)
+			{
+				if(e.getMessage().contains("value too large"))	// value overflow
+				{
+					result = -1;
+				}
+				else
+				{
+					Logger.getGlobal().warning("연락처 추가 도중 문제가 발생하였습니다." + e.getMessage());	
+				}
+			}
+			finally
+			{
+				ConnectionManager.getInstance().close(conn, pstmt, null);
+			}
+			
+			return result;
+		}
+	
+	// contactid로 연락처 삭제
+	public int deleteContact(String contactID )
+	{
+		int result = 0;
+		
+		Connection conn = ConnectionManager.getInstance().getConnection();
+		PreparedStatement pstmt = null;
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("delete from contactlist	"); 
+		sql.append(" where contactid = ?	");
+		
+		try
+		{
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, contactID);
+			result = pstmt.executeUpdate();
+		}
+		catch (SQLTimeoutException e)
+		{
+			Logger.getGlobal().warning("TimeOut Exception 발생");
+		}
+		catch (SQLException e)
+		{
+			Logger.getGlobal().warning("연락처 삭제 도중 문제가 발생하였습니다." + e.getMessage());
+		}
+		finally
+		{
+			ConnectionManager.getInstance().close(conn, pstmt, null);
 		}
 		
 		return result;

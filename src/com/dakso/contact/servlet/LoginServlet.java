@@ -1,4 +1,4 @@
-package com.dakso.contact;
+package com.dakso.contact.servlet;
 
 import java.io.IOException;
 
@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.dakso.contact.VO.UserVO;
 import com.dakso.contact.service.UserService;
 
 @WebServlet("/LoginServlet")
@@ -37,11 +38,9 @@ public class LoginServlet extends HttpServlet
 		if(member == null)
 		{
 			response.sendRedirect("loginForm.html");
-			System.out.println("-");
 		}
 		else
 		{
-			System.out.println("--");
 			HttpSession session = request.getSession();
 			session.setAttribute("id", member.getUserid());
 			session.setAttribute("name", member.getName());

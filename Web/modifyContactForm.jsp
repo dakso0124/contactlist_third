@@ -204,7 +204,7 @@ function addresspopup()
             
 
           <div class="my-4">
-          	<button class="w-100 btn btn-primary btn-lg" type="submit">추가 하기</button>
+          	<button class="w-100 btn btn-primary btn-lg" type="submit">저장 하기</button>
           </div>
           </div>
         </form>

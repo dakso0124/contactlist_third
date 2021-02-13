@@ -2,15 +2,17 @@ package com.dakso.contact.service;
 
 import java.util.ArrayList;
 
-import com.dakso.contact.ContactVO;
-import com.dakso.contact.RelationVO;
-import com.dakso.contact.UserVO;
+import com.dakso.contact.VO.ContactVO;
+import com.dakso.contact.VO.RelationVO;
+import com.dakso.contact.VO.UserVO;
 import com.dakso.contact.dao.ContactDAO;
 
 public class UserService 
 {
 	private ContactDAO m_dao = new ContactDAO();
 	
+	
+	//////////////////////////////////////////////////////////////////////// contact
 	public ArrayList<ContactVO> showAll(String userID)
 	{
 		return m_dao.showAll(userID);
@@ -26,7 +28,23 @@ public class UserService
 		return m_dao.searchByContactID(contactID);
 	}
 	
+	public int deleteContact(String contactID)
+	{
+		return m_dao.deleteContact(contactID);
+	}
 	////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////// user
+	public int addUser(UserVO member)
+	{
+		return m_dao.addUser(member);
+	}
+	
+	public int updateUser(UserVO member)
+	{
+		return m_dao.updateUser(member);
+	}
+
 	public UserVO selectByID(String id, String pw)
 	{
 		return m_dao.login(id, pw);
@@ -36,10 +54,12 @@ public class UserService
 	{
 		return m_dao.selectByID(id, name);
 	}
-	/////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	
+	//////////////////////////////////////////////////////////////////////// relation
 	public ArrayList<RelationVO> searchRelationByUserID(String userID )
 	{
 		return m_dao.searchRelationByUserID(userID);
 	}
+	////////////////////////////////////////////////////////////////////////
 }

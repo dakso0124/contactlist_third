@@ -104,7 +104,7 @@ function addresspopup()
 	
 	            // 우편번호와 주소 정보를 해당 필드에 넣는다.
 	            document.getElementById('postcode').value = data.zonecode;
-	            document.getElementById("address").value = addr;
+	            document.getElementById("mainAddress").value = addr;
 	            // 커서를 상세주소 필드로 이동한다.
 	            document.getElementById("detailAddress").focus();
         	}
@@ -126,7 +126,7 @@ function addresspopup()
           <div class="row g-3">
             <div class="col-sm-12">
               <label for="id" class="form-label">ID</label>
-              <input type="text" class="form-control" id="id" placeholder="아이디를 입력해 주세요" value="" required>
+              <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력해 주세요" value="" required>
               <div class="invalid-feedback">
                 	ID를 입력해 주세요.
               </div>
@@ -135,7 +135,7 @@ function addresspopup()
             <div class="col-12">
               <label for="pw" class="form-label">비밀번호</label>
               <div class="input-group">
-                <input type="password" class="form-control" id="pw" placeholder="비밀번호를 입력해 주세요" required>
+                <input type="password" class="form-control" id="pw" name="pw" placeholder="비밀번호를 입력해 주세요" required>
               <div class="invalid-feedback">
                   	비밀번호를 입력해 주세요.
                 </div>
@@ -143,9 +143,9 @@ function addresspopup()
             </div>
 
             <div class="col-12">
-              <label for="username" class="form-label">이름</label>
+              <label for="name" class="form-label">이름</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="username" placeholder="이름을 입력해 주세요" required>
+                <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력해 주세요" required>
               <div class="invalid-feedback">
                   	이름을 입력해 주세요.
                 </div>
@@ -154,7 +154,7 @@ function addresspopup()
             
             <div class="col-md-4">
               <label for="first_digit" class="form-label">전화번호</label>
-              <select class="form-select" id="first_digit" required>
+              <select class="form-select" id="first_digit" name="first_digit" required>
                 <option value="010">010</option>
                 <option value="011">011</option>
                 <option value="016">016</option>
@@ -166,7 +166,7 @@ function addresspopup()
             
             <div class="col-sm-4">
              <label class="pt-4"></label>
-              <input type="text" class="form-control" id="second_digit" placeholder="" value="" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+              <input type="text" class="form-control" id="second_digit" name="second_digit" maxlength="4" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
               	전화번호를 올바르게 입력해 주세요.
               </div>
@@ -174,7 +174,7 @@ function addresspopup()
             
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
-	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
+	            	<input type="text" class="form-control" id="third_digit" name="third_digit" maxlength="4" pattern=".{4,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
 	            	<div class="invalid-feedback">
 	              		전화번호를 올바르게 입력해 주세요.
 	            	</div>
@@ -182,7 +182,7 @@ function addresspopup()
             
             <div class="col-md-2">
             	<label for="postcode" class="form-label">우편번호</label>
-                <input type="text" class="form-control" id="postcode" placeholder="" required>
+                <input type="text" class="form-control" id="postcode" name="postcode" placeholder="" required>
               	<div class="invalid-feedback">
                   	주소를 입력해 주세요.
                 </div>
@@ -190,13 +190,13 @@ function addresspopup()
             <div class="col-sm-4">
             <label class="pt-1"></label>
             	<div class="py-2">
-	      			<button class="w-80 btn btn-primary btn-MD" onclick="addresspopup()">우편번호 찾기</button>
+	      			<button class="w-80 btn btn-primary btn-MD" type="button" onclick="addresspopup() ">우편번호 찾기</button>
 	      		</div>
             </div>
             
             <div class="col-12">
               <label for="address" class="form-label">주소</label>
-                <input type="text" class="form-control" id="address" placeholder="" required>
+                <input type="text" class="form-control" id="mainAddress" name="mainAddress" placeholder="" required>
               <div class="invalid-feedback">
                   	주소를 입력해 주세요.
                 </div>
@@ -204,7 +204,7 @@ function addresspopup()
             
             <div class="col-12">
               <label for="detailAddress" class="form-label">상세 주소</label>
-                <input type="text" class="form-control" id="detailAddress" placeholder="상세주소">
+                <input type="text" class="form-control" id="detailAddress" name="detailAddress" placeholder="상세주소">
             </div>
             
 

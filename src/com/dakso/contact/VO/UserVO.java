@@ -1,4 +1,4 @@
-package com.dakso.contact;
+package com.dakso.contact.VO;
 
 public class UserVO
 {
@@ -12,6 +12,15 @@ public class UserVO
 	public UserVO()
 	{
 		
+	}
+	
+	public UserVO(String userid, String password, String name, String phone, String address)
+	{
+		this.userid = userid;
+		this.password = password;
+		this.name = name;
+		this.phone = phone;
+		this.address = address;
 	}
 	
 	public UserVO(String userid, String password, String name, String phone, String address, String join_date)

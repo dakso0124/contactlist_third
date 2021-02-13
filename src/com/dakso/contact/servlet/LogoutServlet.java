@@ -1,4 +1,4 @@
-package com.dakso.contact;
+package com.dakso.contact.servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

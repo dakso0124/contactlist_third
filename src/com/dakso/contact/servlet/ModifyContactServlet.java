@@ -1,4 +1,4 @@
-package com.dakso.contact;
+package com.dakso.contact.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,15 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.dakso.contact.VO.ContactVO;
+import com.dakso.contact.VO.RelationVO;
 import com.dakso.contact.service.UserService;
 
-@WebServlet("/ModifyUserServlet")
-public class ModifyUserServlet extends HttpServlet
+@WebServlet("/ModifyContactServlet")
+public class ModifyContactServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	
        
-    public ModifyUserServlet()
+    public ModifyContactServlet()
     {
         super();
     }
@@ -28,20 +29,21 @@ public class ModifyUserServlet extends HttpServlet
 	{
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("id");
-		String name = (String)session.getAttribute("name");
 		
 		if(id == null)
 		{
 			response.sendRedirect("MainServlet");
-			return;
 		}
 		else
 		{
+			// membervo request에 담아야함
 			UserService m_service = new UserService();
-			UserVO user = m_service.selectByName(id, name);
-			request.setAttribute("user", user);
+			ArrayList<RelationVO> relations = m_service.searchRelationByUserID(id);
+			ContactVO contact = m_service.searchByContactID(request.getParameter("contactid"));
+			request.setAttribute("contact", contact);
+			request.setAttribute("relations", relations);
 			
-			RequestDispatcher disp = request.getRequestDispatcher("modifyUserForm.jsp");
+			RequestDispatcher disp = request.getRequestDispatcher("modifyContactForm.jsp");
 			disp.forward(request, response);	
 		}
 	}

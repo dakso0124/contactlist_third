@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,6 +74,27 @@ function showfield(name)
  		document.getElementById('selfinput').innerHTML='';
  	}
 }
+
+//alert
+<c:if test="${msg ne null }">
+	<c:set var="msg" value="${msg}"/>
+	
+	<c:if test="${fn:contains(msg, 'overlap')}">
+		alert('전화번호 중복');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'overflow')}">
+		alert('특정 항목을 너무 길게 입력하셨습니다.');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'relation_null')}">
+		alert('그룹을 선택해 주세요.');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'fail')}">
+		alert('회원 추가에 실패했습니다.');
+	</c:if>
+</c:if>
 </script>
     
 <div class="container">
@@ -88,7 +111,7 @@ function showfield(name)
             <div class="col-12">
               <label for="name" class="form-label">이름</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력해 주세요" required>
+                <input type="text" class="form-control" id="name" name="name" value="${contact.name }" placeholder="이름을 입력해 주세요" required>
               <div class="invalid-feedback">
                   	이름을 입력해 주세요.
                 </div>
@@ -98,19 +121,19 @@ function showfield(name)
             <div class="col-md-4">
               <label for="first_digit" class="form-label">전화번호</label>
               <select class="form-select" id="first_digit" name="first_digit" required>
-                <option value="010">010</option>
-                <option value="011">011</option>
-                <option value="016">016</option>
-                <option value="017">017</option>
-                <option value="018">018</option>
-                <option value="019">019</option>
+                <option value="010" <c:if test="${contact.phone1 eq 010}"> selected</c:if>>010</option>
+              	<option value="011" <c:if test="${contact.phone1 eq 011}"> selected</c:if>>011</option>
+              	<option value="016" <c:if test="${contact.phone1 eq 016}"> selected</c:if>>016</option>
+              	<option value="017" <c:if test="${contact.phone1 eq 017}"> selected</c:if>>017</option>
+              	<option value="018" <c:if test="${contact.phone1 eq 018}"> selected</c:if>>018</option>
+              	<option value="019" <c:if test="${contact.phone1 eq 019}"> selected</c:if>>019</option>
               </select>
             </div>
             
             <div class="col-sm-4">
              <label class="pt-4"></label>
              <div class="input-group">
-              <input type="text" class="form-control" id="second_digit" name="second_digit" value="" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+              <input type="text" class="form-control" id="second_digit" name="second_digit" value="${contact.phone2 }" pattern=".{3,4}" maxlength="4" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
               	전화번호를 입력해 주세요.
               </div>
@@ -120,7 +143,7 @@ function showfield(name)
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
 	            <div class="input-group">
-	            	<input type="tel" class="form-control" id="third_digit" name="third_digit" value="" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
+	            	<input type="tel" class="form-control" id="third_digit" name="third_digit" value="${contact.phone3 }" pattern=".{4,4}" maxlength="4" required oninput="removeChar(event)" style="ime-mode:disabled"/>
 	            	<div class="invalid-feedback">
 	              		전화번호를 입력해 주세요.
 	            	</div>
@@ -131,8 +154,8 @@ function showfield(name)
 
 	<label for="group" class="form-label">그룹 선택</label>
 <select class="form-select" name="group" id="group" onchange="showfield(this.options[this.selectedIndex].value)" required>
-	<option selected="selected">그룹을 선택해 주세요</option>
-	<option value="Other">직접 입력</option>
+	<option selected="selected" disabled>그룹을 선택해 주세요</option>
+	<option value="Other" >직접 입력</option>
 	<c:forEach items="${relations}" var="relation" >
 		<option value="${relation.relation_name }" <c:if test="${relation.relation_name eq contact.relation_name}">selected</c:if>>${relation.relation_name }</option>
 	</c:forEach>
@@ -143,7 +166,7 @@ function showfield(name)
             <div class="col-12">
               <label for="memo" class="form-label">메모</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="memo" name="memo">
+                <input type="text" class="form-control" id="memo" name="memo" value="${contact.memo }">
               </div>
             </div>
 

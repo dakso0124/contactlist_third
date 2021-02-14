@@ -114,6 +114,23 @@ function addresspopup()
         	}
     }).open();
 }
+
+//alert
+<c:if test="${msg ne null }">
+	<c:set var="msg" value="${msg}"/>
+	
+	<c:if test="${fn:contains(msg, 'overlap')}">
+		alert('전화번호 중복');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'overflow')}">
+		alert('특정 항목을 너무 길게 입력하셨습니다.');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'fail')}">
+		alert('정보 수정에 실패했습니다.');
+	</c:if>
+</c:if>
 </script>
     
 <div class="container">
@@ -131,7 +148,7 @@ function addresspopup()
             <div class="col-sm-12">
               <label for="id" class="form-label">ID</label>
               <%-- <label for="id" class="form-label">${user.userid }</label> --%>
-               <h5 class="mb-2" style=color:#9669f6>${user.userid }</h5>
+               <h5 class="mb-2" style=color:#9669f6><b>${user.userid }</b></h5>
             </div>
             
             <div class="col-12">

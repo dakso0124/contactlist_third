@@ -1,3 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,6 +115,27 @@ function addresspopup()
         	}
     }).open();
 }
+
+//alert
+<c:if test="${msg ne null }">
+	<c:set var="msg" value="${msg}"/>
+	
+	<c:if test="${fn:contains(msg, 'overflow')}">
+		alert('특정 항목을 너무 길게 입력하셨습니다');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'id_overlap')}">
+		alert('이미 존재하는 아이디입니다');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'phone_overlap')}">
+		alert('가입된  전화번호입니다');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'fail')}">
+		alert('회원 가입에 실패했습니다.');
+	</c:if>
+</c:if>
 </script>
     
 <div class="container">
@@ -126,7 +152,7 @@ function addresspopup()
           <div class="row g-3">
             <div class="col-sm-12">
               <label for="id" class="form-label">ID</label>
-              <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력해 주세요" value="" required>
+              <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력해 주세요" value="${user.userid }" required>
               <div class="invalid-feedback">
                 	ID를 입력해 주세요.
               </div>
@@ -145,7 +171,7 @@ function addresspopup()
             <div class="col-12">
               <label for="name" class="form-label">이름</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력해 주세요" required>
+                <input type="text" class="form-control" id="name" name="name" value="${user.name }" placeholder="이름을 입력해 주세요" required>
               <div class="invalid-feedback">
                   	이름을 입력해 주세요.
                 </div>
@@ -155,18 +181,18 @@ function addresspopup()
             <div class="col-md-4">
               <label for="first_digit" class="form-label">전화번호</label>
               <select class="form-select" id="first_digit" name="first_digit" required>
-                <option value="010">010</option>
-                <option value="011">011</option>
-                <option value="016">016</option>
-                <option value="017">017</option>
-                <option value="018">018</option>
-                <option value="019">019</option>
+                <option value="010" <c:if test="${user.phone1 eq 010}"> selected</c:if>>010</option>
+              	<option value="011" <c:if test="${user.phone1 eq 011}"> selected</c:if>>011</option>
+              	<option value="016" <c:if test="${user.phone1 eq 016}"> selected</c:if>>016</option>
+              	<option value="017" <c:if test="${user.phone1 eq 017}"> selected</c:if>>017</option>
+              	<option value="018" <c:if test="${user.phone1 eq 018}"> selected</c:if>>018</option>
+              	<option value="019" <c:if test="${user.phone1 eq 019}"> selected</c:if>>019</option>
               </select>
             </div>
             
             <div class="col-sm-4">
              <label class="pt-4"></label>
-              <input type="text" class="form-control" id="second_digit" name="second_digit" maxlength="4" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+              <input type="text" class="form-control" id="second_digit" name="second_digit" maxlength="4" pattern=".{3,4}" value="${user.phone2}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
               	전화번호를 올바르게 입력해 주세요.
               </div>
@@ -174,7 +200,7 @@ function addresspopup()
             
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
-	            	<input type="text" class="form-control" id="third_digit" name="third_digit" maxlength="4" pattern=".{4,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+	            	<input type="text" class="form-control" id="third_digit" name="third_digit" maxlength="4" pattern=".{4,4}" value="${user.phone2}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
 	            	<div class="invalid-feedback">
 	              		전화번호를 올바르게 입력해 주세요.
 	            	</div>
@@ -182,7 +208,7 @@ function addresspopup()
             
             <div class="col-md-2">
             	<label for="postcode" class="form-label">우편번호</label>
-                <input type="text" class="form-control" id="postcode" name="postcode" placeholder="" required>
+                <input type="text" class="form-control" id="postcode" name="postcode" value="${user.zipcode}" required>
               	<div class="invalid-feedback">
                   	주소를 입력해 주세요.
                 </div>
@@ -196,7 +222,7 @@ function addresspopup()
             
             <div class="col-12">
               <label for="address" class="form-label">주소</label>
-                <input type="text" class="form-control" id="mainAddress" name="mainAddress" placeholder="" required>
+                <input type="text" class="form-control" id="mainAddress" name="mainAddress" value="${user.mainaddress}" required>
               <div class="invalid-feedback">
                   	주소를 입력해 주세요.
                 </div>
@@ -204,7 +230,7 @@ function addresspopup()
             
             <div class="col-12">
               <label for="detailAddress" class="form-label">상세 주소</label>
-                <input type="text" class="form-control" id="detailAddress" name="detailAddress" placeholder="상세주소">
+                <input type="text" class="form-control" id="detailAddress" name="detailAddress" value="${user.detailaddress}" placeholder="상세주소">
             </div>
             
 

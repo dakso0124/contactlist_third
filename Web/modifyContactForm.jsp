@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,6 +74,23 @@ function showfield(name)
  		document.getElementById('selfinput').innerHTML='';
  	}
 }
+
+// alert
+<c:if test="${msg ne null }">
+	<c:set var="msg" value="${msg}"/>
+
+	<c:if test="${fn:contains(msg, 'overlap')}">
+		alert('전화번호 중복');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'overflow')}">
+		alert('특정 항목을 너무 길게 입력하셨습니다.');
+	</c:if>
+	
+	<c:if test="${fn:contains(msg, 'fail')}">
+		alert('정보 수정에 실패했습니다.');
+	</c:if>
+</c:if>
 </script>
     
 <div class="container">
@@ -83,7 +102,7 @@ function showfield(name)
 
         <h4 class="mb-2" style=color:#9669f6>연락처 수정</h4>
         
-        <form class="needs-validation" action="/insert.do" method="post" novalidate>
+        <form class="needs-validation" action="ModifyContactServlet" method="post" novalidate>
           <div class="row g-3">
             <div class="col-12">
               <label for="name" class="form-label">이름</label>
@@ -110,7 +129,7 @@ function showfield(name)
             <div class="col-sm-4">
              <label class="pt-4"></label>
              <div class="input-group">
-              <input type="text" class="form-control" id="second_digit" placeholder="" value="${contact.phone2}" pattern=".{3,4}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+              <input type="text" class="form-control" id="second_digit" placeholder="" value="${contact.phone2}" pattern=".{3,4}" maxlength="4" required oninput="removeChar(event)" style="ime-mode:disabled"/>
               <div class="invalid-feedback">
               	전화번호를 입력해 주세요.
               </div>
@@ -120,7 +139,7 @@ function showfield(name)
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
 	            <div class="input-group">
-	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="${contact.phone3}" pattern=".{4,4}" required onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'>
+	            	<input type="tel" class="form-control" id="third_digit" placeholder="" value="${contact.phone3}" pattern=".{4,4}" maxlength="4" required oninput="removeChar(event)" style="ime-mode:disabled"/>
 	            	<div class="invalid-feedback">
 	              		전화번호를 입력해 주세요.
 	            	</div>
@@ -147,7 +166,6 @@ function showfield(name)
                 <input type="text" class="form-control" id="memo" value="${contact.memo }">
               </div>
             </div>
-            
 
           <div class="my-4">
           	<button class="w-100 btn btn-primary btn-lg" type="submit">저장 하기</button>

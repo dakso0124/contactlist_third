@@ -1,6 +1,8 @@
 package com.dakso.contact.servlet;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +26,8 @@ public class JoinServlet extends HttpServlet
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		response.sendRedirect("joinForm.html");
+		RequestDispatcher disp = request.getRequestDispatcher("joinForm.jsp");
+		disp.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -39,9 +42,36 @@ public class JoinServlet extends HttpServlet
 		String address = request.getParameter("postcode") + "`" + request.getParameter("mainAddress") + "`" 
 							+ request.getParameter("detailAddress");
 		
-		UserVO member = new UserVO(id, pw, name, phone, address);
-		m_service.addUser(member);
+		UserVO user = new UserVO(id, pw, name, phone, address);
+		int addResult = m_service.addUser(user);
 		
-		response.sendRedirect("MainServlet");
+		
+		if( addResult > 0)	// 가입 성공
+		{
+			response.sendRedirect("MainServlet");
+		}
+		else
+		{
+			if( addResult == -1)	// overflow
+			{
+				request.setAttribute("msg", "overflow");
+				request.setAttribute("user", user);
+				doGet(request, response);
+			}
+			else if( addResult == -2)
+			{
+				request.setAttribute("msg", "id_overlap");
+				user.setUserid("");
+				request.setAttribute("user", user);
+				doGet(request, response);
+			}
+			else if( addResult == -3)
+			{
+				request.setAttribute("msg", "phone_overlap");
+				user.setPhone("");
+				request.setAttribute("user", user);
+				doGet(request, response);
+			}
+		}
 	}
 }

@@ -66,28 +66,65 @@ public class InsertContactServlet extends HttpServlet
 			String memo = request.getParameter("memo");
 			
 			ContactVO contact = new ContactVO();
+			
+			if(m_service.checkContactPhone(phone, id) > 0)
+			{
+				contact.setName(name);
+				contact.setPhone(phone);
+				contact.setRelation_name(relation_name);
+				contact.setMemo(memo);
+				request.setAttribute("contact", contact);
+				request.setAttribute("msg", "overlap");
+				doGet(request, response);
+				return;
+			}
+			
 			RelationVO relation = m_service.searchRelationByName(relation_name, id);
 			
 			if(relation.getRelation_name() == null)
 			{
-				if(m_service.addRelation(relation_name, id) > 0)
+				int addRelationResult = m_service.addRelation(relation_name, id); 
+				
+				if(addRelationResult > 0)
 				{
 					relation = m_service.searchRelationByName(relation_name, id);
 					contact = new ContactVO(name, phone, memo,  relation.getRealation_key(),relation_name, id);
 					
-					if(m_service.insertContact(contact, id) > 0)
+					
+					int addResult = m_service.insertContact(contact, id);
+					
+					if( addResult > 0)
 					{
 						response.sendRedirect("MainServlet");
 					}
+					else if(addResult == -1)
+					{
+						request.setAttribute("msg", "overflow");
+						doGet(request, response);
+					}
 					else
 					{
-						// 팝업띄울것!
-						System.out.println("tq");
+						request.setAttribute("msg", "fail");
+						doGet(request, response);
 					}
 				}
 				else
 				{
-					// 팝업띄울것!
+					if(addRelationResult == -1)
+					{
+						request.setAttribute("msg", "overflow");
+						doGet(request, response);
+					}
+					else if(addRelationResult == -2)
+					{
+						request.setAttribute("msg", "relation_null");
+						doGet(request, response);
+					}
+					else
+					{
+						request.setAttribute("msg", "fail");
+						doGet(request, response);
+					}
 				}
 			}
 			else

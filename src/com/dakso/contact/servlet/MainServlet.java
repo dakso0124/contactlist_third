@@ -37,7 +37,11 @@ public class MainServlet extends HttpServlet
 		
 		if(id == null || name == null)
 		{
-			response.sendRedirect("loginForm.html");
+			request.setAttribute("msg", "timeout");
+			RequestDispatcher disp = request.getRequestDispatcher("loginForm.jsp");
+			disp.forward(request, response);
+			
+			/* response.sendRedirect("loginForm.jsp"); */
 		}
 		else
 		{
@@ -51,11 +55,6 @@ public class MainServlet extends HttpServlet
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
-		actionDo(request, response);
-	}
-
-	private void actionDo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		
 	}

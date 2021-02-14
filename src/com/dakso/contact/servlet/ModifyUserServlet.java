@@ -82,18 +82,28 @@ public class ModifyUserServlet extends HttpServlet
 				member.setPhone(phone);
 				member.setAddress(address);
 				
-				if( m_service.updateUser(member) > 0)
+				int updateResult = m_service.updateUser(member); 
+				
+				if( updateResult > 0)
 				{
-					/*
-					 * RequestDispatcher disp = request.getRequestDispatcher("MainServlet");
-					 * disp.forward(request, response);
-					 */
 					response.sendRedirect("MainServlet");
+				}
+				else if(updateResult == -1)
+				{
+					request.setAttribute("msg", "overflow");
+					doGet(request, response);
+				}
+				else if(updateResult == -2)
+				{
+					request.setAttribute("msg", "phone_overlap");
+					
+					doGet(request, response);
 				}
 				else
 				{
+					request.setAttribute("msg", "fail");
+					
 					doGet(request, response);
-					System.out.println("정보 수정 실패");
 				}
 			}
 		}

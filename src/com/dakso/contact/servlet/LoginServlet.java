@@ -33,11 +33,16 @@ public class LoginServlet extends HttpServlet
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		request.setCharacterEncoding("utf-8");
+		
 		UserVO member = m_service.selectByID(request.getParameter("id"), request.getParameter("pw"));
 		
 		if(member == null)
 		{
-			response.sendRedirect("loginForm.html");
+			request.setAttribute("msg", "invalid");
+			RequestDispatcher disp = request.getRequestDispatcher("loginForm.jsp");
+			disp.forward(request, response);
+			
+			/* response.sendRedirect("loginForm.jsp"); */
 		}
 		else
 		{

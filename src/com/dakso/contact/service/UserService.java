@@ -28,6 +28,11 @@ public class UserService
 		return m_dao.searchByContactID(contactID);
 	}
 	
+	public int checkContactPhone(String phone, String userID)
+	{
+		return m_dao.checkContactPhone(phone, userID);
+	}
+	
 	public int insertContact(ContactVO contact, String userID)
 	{
 		return m_dao.insertContact(contact, userID);

@@ -65,11 +65,17 @@ public class ContactVO
 	
 	public String getPhone1()
 	{
+		if(phone.isEmpty())
+			return null;
+		
 		return phone.substring(0, 3);
 	}
 	
 	public String getPhone2()
 	{
+		if(phone.isEmpty())
+			return null;
+		
 		if(phone.length() == 11)
 		{
 			return phone.substring(3, 7);
@@ -82,6 +88,9 @@ public class ContactVO
 	
 	public String getPhone3()
 	{
+		if(phone.isEmpty())
+			return null;
+		
 		return phone.substring(phone.length() - 4);
 	}
 	

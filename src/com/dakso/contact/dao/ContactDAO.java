@@ -14,6 +14,7 @@ import com.dakso.contact.VO.UserVO;
 
 public class ContactDAO
 {
+	// 회원 가입
 	public int addUser(UserVO member)
 	{
 		int result = 0;
@@ -45,11 +46,20 @@ public class ContactDAO
 		{
 			if(e.getMessage().contains("value too large"))	// value overflow
 			{
-				
+				result = -1;
 			}
 			else
 			{
-				Logger.getGlobal().warning("연락처 추가 도중 문제가 발생하였습니다." + e.getMessage());	
+				Logger.getGlobal().warning("연락처 추가 도중 문제가 발생하였습니다." + e.getMessage());
+				
+				if(e.getMessage().contains("ORA_USER.PK_USERINFO_USERID"))		// id pk 위반
+				{
+					result = -2;
+				}
+				else if(e.getMessage().contains("ORA_USER.UK_USERINFO_PHONE"))	// phone uk 위반
+				{
+					result = -3;
+				}
 			}
 		}
 		finally
@@ -60,6 +70,7 @@ public class ContactDAO
 		return result;
 	}
 	
+	// 회원 정보 수정
 	public int updateUser(UserVO member)
 	{
 		int result = 0;
@@ -91,7 +102,11 @@ public class ContactDAO
 		{
 			if(e.getMessage().contains("value too large"))	// value overflow
 			{
-				
+				result = -1;
+			}
+			else if(e.getMessage().contains("ORA_USER.UK_USERINFO_PHONE"))
+			{
+				result = -2;
 			}
 			else
 			{
@@ -106,6 +121,7 @@ public class ContactDAO
 		return result;
 	}
 	
+	// 로그인
 	public UserVO login(String id, String pw)
 	{
 		UserVO result = null;
@@ -156,6 +172,7 @@ public class ContactDAO
 		return result;
 	}
 	
+	// 유저 정보 가져오기 ( 정보 수정 하기 전 )
 	public UserVO selectByID(String id, String name)
 	{
 		UserVO result = null;
@@ -206,50 +223,6 @@ public class ContactDAO
 		return result;
 	}
 	
-	public UserVO modify()
-	{
-		UserVO result = null;
-		
-		Connection conn = ConnectionManager.getInstance().getConnection();
-		PreparedStatement pstmt = null;
-		ResultSet rs 			= null;
-		
-		StringBuilder sql = new StringBuilder();
-		
-		sql.append("select count(userid)	");
-		sql.append("  from userinfo			");
-		sql.append(" where userid = ?		");
-		sql.append("   and password = ?		");
-		
-		try
-		{
-			pstmt = conn.prepareStatement(sql.toString());
-			
-			rs = pstmt.executeQuery();
-			
-			while(rs.next())
-			{
-				result = new UserVO(rs.getString("userid"), rs.getString("password"), rs.getString("name")
-												, rs.getString("phone"), rs.getString("address")
-												, rs.getString("join_date"));
-			}
-		}
-		catch (SQLTimeoutException e)
-		{
-			Logger.getGlobal().warning("TimeOut Exception 발생");
-		}
-		catch (SQLException e)
-		{
-			Logger.getGlobal().warning("로그인 도중 문제가 발생하였습니다." + e.getMessage());
-		}
-		finally
-		{
-			ConnectionManager.getInstance().close(conn, pstmt, rs);
-		}
-		
-		return result;
-	}
-	
 	//////////////////////////// contact 
 	// 모든 연락처 보기
 	public ArrayList<ContactVO> showAll(String userID)
@@ -273,6 +246,8 @@ public class ContactDAO
 		sql.append("    on c.userid = i.userid				");
 		sql.append(" inner JOIN relation r					");
 		sql.append("    on c.relation_key = r.relation_key	");
+		sql.append(" order by c.contactid					");
+		
 
 		try
 		{
@@ -381,7 +356,7 @@ public class ContactDAO
 		sql.append(" inner JOIN relation r					");
 		sql.append("    on c.relation_key = r.relation_key	");
 		sql.append(" where c.contactid = ?					");
-		
+		sql.append(" order by c.contactid					");
 		try
 		{
 			pstmt = conn.prepareStatement(sql.toString());
@@ -394,6 +369,49 @@ public class ContactDAO
 												, rs.getString("memo"), rs.getString("relation_key"),
 												rs.getString("relation_name"), rs.getString("userid"));
 			}
+		}
+		catch (SQLTimeoutException e)
+		{
+			Logger.getGlobal().warning("TimeOut Exception 발생");
+		}
+		catch (SQLException e)
+		{
+			Logger.getGlobal().warning("연락처 검색 도중 문제가 발생하였습니다." + e.getMessage());
+		}
+		finally
+		{
+			ConnectionManager.getInstance().close(conn, pstmt, rs);
+		}
+		
+		return result;
+	}
+	
+	// 연락처 추가하기전 전화번호 중복 체크
+	public int checkContactPhone(String phone, String userID)
+	{
+		int result = 0;
+		
+		Connection conn = ConnectionManager.getInstance().getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs 			= null;
+
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("select count(phone) as count	");
+		sql.append("  from contactlist				");
+		sql.append(" where userid = ? 				");
+		sql.append("   and phone = ? 				");
+		
+		try
+		{
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, userID);
+			pstmt.setString(2, phone);
+			
+			rs = pstmt.executeQuery();
+
+			rs.next();
+			result = rs.getInt("count");
 		}
 		catch (SQLTimeoutException e)
 		{
@@ -437,9 +455,10 @@ public class ContactDAO
 			
 			result = pstmt.executeUpdate();
 			
-			/*
-			 * if(result > 0) { result = 1; }
-			 */
+			if(result > 0)
+			{
+				result = 1;
+			}
 		}
 		catch (SQLTimeoutException e)
 		{
@@ -499,7 +518,7 @@ public class ContactDAO
 	}
 	////////////////////////////////// end contact
 	
-	//////////////////////// relation
+	////////////////////////////////// relation
 	public int addRelation(String relation_name, String userID)
 	{
 		int result = 0;
@@ -536,7 +555,11 @@ public class ContactDAO
 		{
 			if(e.getMessage().contains("value too large"))	// value overflow
 			{
-				
+				result = -1;
+			}
+			else if(e.getMessage().contains("cannot insert NULL into"))	// relation not null
+			{
+				result = -2;
 			}
 			else
 			{

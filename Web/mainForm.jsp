@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,6 +36,15 @@ function movedelete(id)
 {
 	location.href = "DeleteContactServlet?contactid=" + id;
 }
+
+//alert
+<c:if test="${msg ne null }">
+	<c:set var="msg" value="${msg}"/>
+	
+	<c:if test="${fn:contains(msg, 'timeout')}">
+		alert('세션 만료');
+	</c:if>
+</c:if>
 </script>
 
 

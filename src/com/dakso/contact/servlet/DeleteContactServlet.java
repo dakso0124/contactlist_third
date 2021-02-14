@@ -38,10 +38,6 @@ public class DeleteContactServlet extends HttpServlet {
 			int result = m_service.deleteContact(request.getParameter("contactid"));
 
 			response.sendRedirect("MainServlet");
-			/*
-			 * RequestDispatcher disp = request.getRequestDispatcher("MainServlet");
-			 * disp.forward(request, response);
-			 */
 		}
 	}
 

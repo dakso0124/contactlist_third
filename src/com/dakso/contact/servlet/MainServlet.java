@@ -37,7 +37,6 @@ public class MainServlet extends HttpServlet
 		
 		if(id == null || name == null)
 		{
-			request.setAttribute("msg", "timeout");
 			RequestDispatcher disp = request.getRequestDispatcher("loginForm.jsp");
 			disp.forward(request, response);
 			

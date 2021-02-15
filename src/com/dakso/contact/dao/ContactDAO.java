@@ -14,6 +14,7 @@ import com.dakso.contact.VO.UserVO;
 
 public class ContactDAO
 {
+	/////////////////////////////////////////////////// user
 	// 회원 가입
 	public int addUser(UserVO member)
 	{
@@ -84,6 +85,7 @@ public class ContactDAO
 		sql.append("   set name = ?		");
 		sql.append("     , phone = ?	");
 		sql.append("     , address = ?	");
+		sql.append(" where userid = ? 	");
 		
 		try
 		{
@@ -91,6 +93,7 @@ public class ContactDAO
 			pstmt.setString(1, member.getName());
 			pstmt.setString(2, member.getPhone());
 			pstmt.setString(3, member.getAddress());
+			pstmt.setString(4, member.getUserid());
 			
 			result = pstmt.executeUpdate();
 		}
@@ -222,6 +225,7 @@ public class ContactDAO
 		
 		return result;
 	}
+	/////////////////////////////////////////////////////////// user
 	
 	//////////////////////////// contact 
 	// 모든 연락처 보기
@@ -246,12 +250,15 @@ public class ContactDAO
 		sql.append("    on c.userid = i.userid				");
 		sql.append(" inner JOIN relation r					");
 		sql.append("    on c.relation_key = r.relation_key	");
+		sql.append(" where c.userid = ? 					");
 		sql.append(" order by c.contactid					");
 		
 
 		try
 		{
 			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, userID);
+			
 			rs = pstmt.executeQuery();
 			
 			while(rs.next())
@@ -301,6 +308,7 @@ public class ContactDAO
 		sql.append("    on c.userid = i.userid				");
 		sql.append(" inner JOIN relation r					");
 		sql.append("    on c.relation_key = r.relation_key	");
+		sql.append(" order by c.contactid					");
 		
 		try
 		{
@@ -357,6 +365,7 @@ public class ContactDAO
 		sql.append("    on c.relation_key = r.relation_key	");
 		sql.append(" where c.contactid = ?					");
 		sql.append(" order by c.contactid					");
+		
 		try
 		{
 			pstmt = conn.prepareStatement(sql.toString());
@@ -387,9 +396,9 @@ public class ContactDAO
 	}
 	
 	// 연락처 추가하기전 전화번호 중복 체크
-	public int checkContactPhone(String phone, String userID)
+	public String checkContactPhone(String phone, String userid)
 	{
-		int result = 0;
+		String result = "";
 		
 		Connection conn = ConnectionManager.getInstance().getConnection();
 		PreparedStatement pstmt = null;
@@ -397,21 +406,23 @@ public class ContactDAO
 
 		StringBuilder sql = new StringBuilder();
 		
-		sql.append("select count(phone) as count	");
-		sql.append("  from contactlist				");
-		sql.append(" where userid = ? 				");
-		sql.append("   and phone = ? 				");
+		sql.append("select userid			");
+		sql.append("  from contactlist		");
+		sql.append(" where phone = ? 		");
+		sql.append("   and userid = ? 		");
 		
 		try
 		{
 			pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setString(1, userID);
-			pstmt.setString(2, phone);
+			pstmt.setString(1, phone);
+			pstmt.setString(2, userid);
 			
 			rs = pstmt.executeQuery();
 
-			rs.next();
-			result = rs.getInt("count");
+			while(rs.next())
+			{
+				result = rs.getString("userid");
+			}
 		}
 		catch (SQLTimeoutException e)
 		{
@@ -430,7 +441,7 @@ public class ContactDAO
 	}
 	
 	// 연락처 추가
-	public int insertContact(ContactVO contact, String userID)
+	public int insertContact(ContactVO contact)
 	{
 		int result = 0;
 		
@@ -444,6 +455,7 @@ public class ContactDAO
 		sql.append("values( NVL( (select max(contactid)			");
 		sql.append("				from contactlist) + 1, 1 ) 	");
 		sql.append("      , ? , ? , ? , ? , ? )					");
+		
 		try
 		{
 			pstmt = conn.prepareStatement(sql.toString());
@@ -468,11 +480,71 @@ public class ContactDAO
 		{
 			if(e.getMessage().contains("value too large"))	// value overflow
 			{
+				System.out.println(e.getMessage());
 				result = -1;
 			}
 			else
 			{
 				Logger.getGlobal().warning("연락처 추가 도중 문제가 발생하였습니다." + e.getMessage());	
+			}
+		}
+		finally
+		{
+			ConnectionManager.getInstance().close(conn, pstmt, null);
+		}
+		
+		return result;
+	}
+	
+	public int updateContact(ContactVO contact)
+	{
+		int result = 0;
+		
+		Connection conn = ConnectionManager.getInstance().getConnection();
+		PreparedStatement pstmt = null;
+
+		StringBuilder sql = new StringBuilder();
+		
+		// 회원번호는 가장큰수를 select하여 거기에 +1로 지정
+		sql.append("update contactlist			");
+		sql.append("   set name = ?				");
+		sql.append("     , phone = ?			");
+		sql.append("     , memo = ?				");
+		sql.append("     , relation_key = ?		");
+		sql.append(" where userid = ? 			");
+		sql.append("   and contactid = ?		");
+		
+		try
+		{
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, contact.getName());
+			pstmt.setString(2, contact.getPhone());
+			pstmt.setString(3, contact.getMemo());
+			pstmt.setString(4, contact.getRealation_key());
+			pstmt.setString(5, contact.getUserid());
+			pstmt.setInt(6, contact.getContactID());
+			
+			result = pstmt.executeUpdate();
+			
+			if(result > 0)
+			{
+				result = 1;
+			}
+		}
+		catch (SQLTimeoutException e)
+		{
+			System.out.println("TimeOut Exception");
+		}
+		catch (SQLException e)
+		{
+			if(e.getMessage().contains("value too large"))	// value overflow
+			{
+				System.out.println(e.getMessage());
+				result = -1;
+			}
+			else
+			{
+				Logger.getGlobal().warning("연락처 수정 도중 문제가 발생하였습니다." + e.getMessage());	
 			}
 		}
 		finally
@@ -557,10 +629,6 @@ public class ContactDAO
 			{
 				result = -1;
 			}
-			else if(e.getMessage().contains("cannot insert NULL into"))	// relation not null
-			{
-				result = -2;
-			}
 			else
 			{
 				Logger.getGlobal().warning("그룹 추가 도중 문제가 발생하였습니다." + e.getMessage());	
@@ -588,6 +656,7 @@ public class ContactDAO
 		sql.append("     , userid			");
 		sql.append("  from relation			");
 		sql.append(" where userid = ? 		");
+		sql.append(" order by relation_key	");
 		
 		try
 		{
@@ -618,7 +687,7 @@ public class ContactDAO
 		return result;
 	}
 	
-	public RelationVO searchRelationByName(String relation_name, String userID)
+	public RelationVO searchRelationByName(String relation_name, String userID)	// 사용자의 id로 등록한 그룹명 체크
 	{
 		RelationVO result = new RelationVO();
 		
@@ -627,18 +696,19 @@ public class ContactDAO
 		ResultSet rs 			= null;
 
 		StringBuilder sql = new StringBuilder();
-		sql.append("select relation_key		");
-		sql.append("     , relation_name	");
-		sql.append("     , userid			");
-		sql.append("  from relation			");
-		sql.append(" where userid = ? 		");
-		sql.append("   and relation_name = ? 		");
+		sql.append("select relation_name		");
+		sql.append("     , relation_key			");
+		sql.append("     , userid				");
+		sql.append("  from relation				");
+		sql.append(" where userid = ? 			");
+		sql.append("   and relation_name = ? 	");
 		
 		try
 		{
 			pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, userID);
 			pstmt.setString(2, relation_name);
+			
 			rs = pstmt.executeQuery();
 
 			while(rs.next())

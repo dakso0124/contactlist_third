@@ -33,7 +33,9 @@ public class ModifyUserServlet extends HttpServlet
 		
 		if(id == null)
 		{
-			response.sendRedirect("MainServlet");
+			request.setAttribute("msg", "timeout");
+			RequestDispatcher disp = request.getRequestDispatcher("MainServlet");
+			disp.forward(request, response);
 		}
 		else
 		{
@@ -57,7 +59,9 @@ public class ModifyUserServlet extends HttpServlet
 
 		if(id == null || pw == null)
 		{
-			response.sendRedirect("MainServlet");
+			request.setAttribute("msg", "timeout");
+			RequestDispatcher disp = request.getRequestDispatcher("MainServlet");
+			disp.forward(request, response);
 		}
 		else
 		{
@@ -78,6 +82,7 @@ public class ModifyUserServlet extends HttpServlet
 									+ request.getParameter("detailAddress");
 				
 				UserVO member = new UserVO();
+				member.setUserid(id);
 				member.setName(name);
 				member.setPhone(phone);
 				member.setAddress(address);

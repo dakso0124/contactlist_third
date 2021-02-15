@@ -29,7 +29,11 @@ public class DeleteContactServlet extends HttpServlet {
 		
 		if(id == null)
 		{
-			response.sendRedirect("MainServlet");
+			request.setAttribute("msg", "timeout");
+			RequestDispatcher disp = request.getRequestDispatcher("MainServlet");
+			disp.forward(request, response);
+			
+			/* response.sendRedirect("MainServlet"); */
 		}
 		else
 		{

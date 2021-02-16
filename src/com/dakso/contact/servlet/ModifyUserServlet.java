@@ -89,8 +89,11 @@ public class ModifyUserServlet extends HttpServlet
 				
 				int updateResult = m_service.updateUser(member); 
 				
-				if( updateResult > 0)
+				if( updateResult > 0)		// 정보 수정하고 id, 이름 새로 저장
 				{
+					session.setAttribute("id", member.getUserid());
+					session.setAttribute("name", member.getName());
+					
 					response.sendRedirect("MainServlet");
 				}
 				else if(updateResult == -1)

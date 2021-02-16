@@ -79,6 +79,7 @@ public class ModifyContactServlet extends HttpServlet
 			contact.setPhone(phone);
 			contact.setRelation_name(relation_name);
 			contact.setMemo(memo);
+			contact.setUserid(id);
 			
 			if(relation_name == null)							// 그룹 입력 x
 			{
@@ -88,13 +89,19 @@ public class ModifyContactServlet extends HttpServlet
 				return;
 			}
 			
-			if(m_service.checkContactPhone(phone, id).isEmpty())	// 전화번호 중복
+			ContactVO checkPhone = m_service.checkContactPhone(phone, id);
+			
+			if(checkPhone.getUserid() != null)	
 			{
-				request.setAttribute("contact", contact);
-				request.setAttribute("msg", "overlap");
-				doGet(request, response);
-				return;
+				if(contact.getContactID() != checkPhone.getContactID() && checkPhone.getUserid().equals(id))	// 전화번호 중복
+				{
+					request.setAttribute("contact", contact);
+					request.setAttribute("msg", "overlap");
+					doGet(request, response);
+					return;
+				}
 			}
+			
 			
 			RelationVO relation = m_service.searchRelationByName(relation_name, id);
 			
@@ -106,7 +113,6 @@ public class ModifyContactServlet extends HttpServlet
 				{
 					relation = m_service.searchRelationByName(relation_name, id);
 					contact.setRealation_key(relation.getRealation_key());
-					contact.setUserid(id);
 					
 					m_service.updateContact(contact);
 					
@@ -132,7 +138,7 @@ public class ModifyContactServlet extends HttpServlet
 			}
 			else
 			{
-				contact = new ContactVO(name, phone, memo,  relation.getRealation_key(),relation_name, id);
+				contact.setRealation_key(relation.getRealation_key());
 				m_service.updateContact(contact);
 				
 				response.sendRedirect("MainServlet");

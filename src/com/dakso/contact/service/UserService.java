@@ -28,7 +28,7 @@ public class UserService
 		return m_dao.searchByContactID(contactID);
 	}
 	
-	public String checkContactPhone(String phone, String userid)
+	public ContactVO checkContactPhone(String phone, String userid)
 	{
 		return m_dao.checkContactPhone(phone, userid);
 	}

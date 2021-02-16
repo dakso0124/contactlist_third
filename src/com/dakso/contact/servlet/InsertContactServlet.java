@@ -82,7 +82,9 @@ public class InsertContactServlet extends HttpServlet
 				return;
 			}
 
-			if(m_service.checkContactPhone(phone, id).isEmpty() == false )	// 전화번호 중복
+			ContactVO vo = m_service.checkContactPhone(phone, id);
+
+			if(m_service.checkContactPhone(phone, id).getContactID() != 0 )	// 전화번호 중복
 			{
 				request.setAttribute("contact", contact);
 				request.setAttribute("msg", "overlap");

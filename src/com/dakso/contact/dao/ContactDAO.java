@@ -396,9 +396,9 @@ public class ContactDAO
 	}
 	
 	// 연락처 추가하기전 전화번호 중복 체크
-	public String checkContactPhone(String phone, String userid)
+	public ContactVO checkContactPhone(String phone, String userid)
 	{
-		String result = "";
+		ContactVO result = new ContactVO();
 		
 		Connection conn = ConnectionManager.getInstance().getConnection();
 		PreparedStatement pstmt = null;
@@ -407,6 +407,7 @@ public class ContactDAO
 		StringBuilder sql = new StringBuilder();
 		
 		sql.append("select userid			");
+		sql.append("     , contactid		");
 		sql.append("  from contactlist		");
 		sql.append(" where phone = ? 		");
 		sql.append("   and userid = ? 		");
@@ -421,7 +422,9 @@ public class ContactDAO
 
 			while(rs.next())
 			{
-				result = rs.getString("userid");
+				result.setContactID(rs.getInt("contactid"));
+				
+				result.setUserid(rs.getString("userid"));
 			}
 		}
 		catch (SQLTimeoutException e)
@@ -505,7 +508,6 @@ public class ContactDAO
 
 		StringBuilder sql = new StringBuilder();
 		
-		// 회원번호는 가장큰수를 select하여 거기에 +1로 지정
 		sql.append("update contactlist			");
 		sql.append("   set name = ?				");
 		sql.append("     , phone = ?			");

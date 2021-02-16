@@ -138,4 +138,11 @@ public class ContactVO
 	{
 		this.userid = userid;
 	}
+	
+	@Override
+	public String toString() {
+		String t ="conid : " + contactID + " , name : " + name + ", phone : " + phone + " , memo : " + memo
+				+ " , relation name : " + relation_name + ", relation key : " + relation_key + " , userid : " + userid;
+		return t;
+	}
 }

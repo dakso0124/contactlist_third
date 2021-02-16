@@ -127,6 +127,10 @@ function addresspopup()
 		alert('특정 항목을 너무 길게 입력하셨습니다.');
 	</c:if>
 	
+	<c:if test="${fn:contains(msg, 'invalid')}">
+		alert('비밀번호를 확인해 주세요.');
+	</c:if>
+	
 	<c:if test="${fn:contains(msg, 'fail')}">
 		alert('정보 수정에 실패했습니다.');
 	</c:if>

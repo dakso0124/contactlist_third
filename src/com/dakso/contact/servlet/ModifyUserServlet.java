@@ -71,6 +71,8 @@ public class ModifyUserServlet extends HttpServlet
 			
 			if(user == null)
 			{
+				request.setAttribute("msg", "invalid");
+				
 				doGet(request, response);
 			}
 			else

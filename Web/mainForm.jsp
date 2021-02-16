@@ -72,8 +72,6 @@ function movedelete(id)
 </h1></form>
 <h2>Edit by <a href="https://github.com/dakso0124" target="_blank">Dakso</a></h2>
 
-
-
 <div style="height: 600px;overflow-y: auto;">
 <table class="container">
 	<thead>

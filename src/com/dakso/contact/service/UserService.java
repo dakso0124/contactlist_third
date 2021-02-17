@@ -10,8 +10,7 @@ import com.dakso.contact.dao.ContactDAO;
 public class UserService 
 {
 	private ContactDAO m_dao = new ContactDAO();
-	
-	
+
 	//////////////////////////////////////////////////////////////////////// contact
 	public ArrayList<ContactVO> showAll(String userID)
 	{

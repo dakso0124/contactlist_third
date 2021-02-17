@@ -21,6 +21,8 @@
 		display : flex;
 		justify-content: flex-end;
 		/* display:inline-block; */
+		padding-top: 10px;
+  		padding-right: 10px;
 	}
 </style>
 
@@ -35,6 +37,34 @@ function moveedit(id)
 function movedelete(id)
 {
 	location.href = "DeleteContactServlet?contactid=" + id;
+}
+
+function search()
+{
+	// Declare variables
+	var input, filter, table, tr, td, i, txtValue;
+	input = document.getElementById("search");
+	filter = input.value.toUpperCase();
+	table = document.getElementById("contactTable");
+	tr = table.getElementsByTagName("tr");
+	
+	// Loop through all table rows, and hide those who don't match the search query
+	for (i = 0; i < tr.length; i++)
+	{
+		td = tr[i].getElementsByTagName("td")[0];
+		if (td)
+		{
+			txtValue = td.textContent || td.innerText;
+			if (txtValue.toUpperCase().indexOf(filter) > -1)
+			{
+		    	tr[i].style.display = "";
+			}
+			else
+			{
+		    	tr[i].style.display = "none";
+		  	}
+		}
+	}
 }
 
 //alert
@@ -73,15 +103,20 @@ function movedelete(id)
 <h2>Edit by <a href="https://github.com/dakso0124" target="_blank">Dakso</a></h2>
 
 <div style="height: 600px;overflow-y: auto;">
-<table class="container">
+
+<div class="mb-1 " >
+	<input type="text" class="form-control" id="search" placeholder="검색할 이름을 입력하세요.." onkeyup="search()" size="10" style="max-width: 960px;" required>
+</div>
+
+<table class="container" id="contactTable">
 	<thead>
 		<tr>
-			<th><h1>이름</h1></th>
-			<th><h1>전화번호</h1></th>
-			<th><h1>메모</h1></th>
-			<th><h1>그룹</h1></th>
-			<th><h1>수정</h1></th>
-			<th><h1>삭제</h1></th>
+			<th style="width:15%"><h1>이름</h1></th>
+			<th style="width:15%"><h1>전화번호</h1></th>
+			<th style="width:35%"><h1>메모</h1></th>
+			<th style="width:15%"><h1>그룹</h1></th>
+			<th style="width:10%"><h1>수정</h1></th>
+			<th style="width:10%"><h1>삭제</h1></th>
 		</tr>
 	</thead>
 	<tbody>

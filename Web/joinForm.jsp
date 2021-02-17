@@ -29,17 +29,20 @@ body
 	background-repeat: no-repeat;
 	background-size: cover;
 }
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+.bd-placeholder-img
+{
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 }
-@media (min-width: 768px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
+@media (min-width: 768px)
+{
+	.bd-placeholder-img-lg
+	{
+    	font-size: 3.5rem;
+  	}
 }
 </style>
 <link href="bootstrap-5.0/checkout/form-validation.css" rel="stylesheet">
@@ -116,6 +119,49 @@ function addresspopup()
     }).open();
 }
 
+function checkpw_blur()
+{
+	var p1 = document.getElementById('pw').value;
+    var p2 = document.getElementById('pw_check').value;
+    
+    if( p1 != p2 )
+    {
+          //alert("비밀번호불일치");
+          const element = document.getElementById('selfinput');
+          element.innerHTML = "<div>비밀번호가 다릅니다.</div>";
+          return false;
+    }
+    return true;
+}
+
+function focus_pw()
+{
+    var p2 = document.getElementById('pw_check').value;
+    
+    //alert("비밀번호불일치");
+    const element = document.getElementById('selfinput');
+    element.innerHTML = "";
+}
+
+function checkpw_submit()
+{
+	var p1 = document.getElementById('pw').value;
+    var p2 = document.getElementById('pw_check').value;
+    
+    if( p1 != p2 )
+    {
+          alert("비밀번호를 확인해주세요.");
+          return false;
+    }
+    else
+    {
+    	document.myform.action="JoinServlet";
+    	document.myform.method="post";
+		document.myform.submit();
+    }
+    
+    return true;
+}
 //alert
 <c:if test="${msg ne null }">
 	<c:set var="msg" value="${msg}"/>
@@ -143,16 +189,16 @@ function addresspopup()
   <div class="col-lg-12">
     <div class="pt-3 text-center">
     	<h3 class="my-5">회원 가입</h3>
-			<!-- <img class="d-block mx-auto mb-4" src="resource/join2.png" alt="" width="128" height="128"> -->
     </div>
 
         <h4 class="mb-2" style=color:#9669f6>정보 입력</h4>
         
-        <form class="needs-validation" action="JoinServlet" method="post" novalidate>
+        <!-- <form class="needs-validation" action="JoinServlet" method="post" novalidate> -->
+        <form class="needs-validation" name="myform" novalidate>
           <div class="row g-3">
             <div class="col-sm-12">
               <label for="id" class="form-label">ID</label>
-              <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력해 주세요" value="${user.userid }" required>
+              <input type="text" class="form-control" id="id" name="id" placeholder="아이디를 입력해 주세요" value="${user.userid }" required/>
               <div class="invalid-feedback">
                 	ID를 입력해 주세요.
               </div>
@@ -165,6 +211,17 @@ function addresspopup()
               <div class="invalid-feedback">
                   	비밀번호를 입력해 주세요.
                 </div>
+              </div>
+            </div>
+            
+            <div class="col-12">
+              <label for="pw" class="form-label">비밀번호 확인</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="pw_check" name="pw_check" placeholder="비밀번호를 한번더 입력해 주세요" onfocus="focus_pw()" onblur="checkpw_blur()" required>
+                <div style="width: 100%; margin-top: 0.25rem; font-size: 0.875em; color: #dc3545;" id="selfinput"></div>
+              <div class="invalid-feedback">
+                  	비밀번호를 입력해 주세요.
+              </div>
               </div>
             </div>
 
@@ -235,7 +292,7 @@ function addresspopup()
             
 
           <div class="my-4">
-          	<button class="w-100 btn btn-primary btn-lg" type="submit">가입하기</button>
+          	<button class="w-100 btn btn-primary btn-lg" type="button" onclick="checkpw_submit()">가입하기</button>
           </div>
           </div>
         </form>

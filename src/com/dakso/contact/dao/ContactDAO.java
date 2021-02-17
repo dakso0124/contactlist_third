@@ -45,22 +45,19 @@ public class ContactDAO
 		}
 		catch (SQLException e)
 		{
+			Logger.getGlobal().warning("회원 가입 도중 문제가 발생하였습니다." + e.getMessage());
+			
 			if(e.getMessage().contains("value too large"))	// value overflow
 			{
 				result = -1;
 			}
-			else
+			else if(e.getMessage().contains("ORA_USER.PK_USERINFO_USERID"))		// id pk 위반
 			{
-				Logger.getGlobal().warning("연락처 추가 도중 문제가 발생하였습니다." + e.getMessage());
-				
-				if(e.getMessage().contains("ORA_USER.PK_USERINFO_USERID"))		// id pk 위반
-				{
-					result = -2;
-				}
-				else if(e.getMessage().contains("ORA_USER.UK_USERINFO_PHONE"))	// phone uk 위반
-				{
-					result = -3;
-				}
+				result = -2;
+			}
+			else if(e.getMessage().contains("ORA_USER.UK_USERINFO_PHONE"))	// phone uk 위반
+			{
+				result = -3;
 			}
 		}
 		finally
@@ -107,13 +104,13 @@ public class ContactDAO
 			{
 				result = -1;
 			}
-			else if(e.getMessage().contains("ORA_USER.UK_USERINFO_PHONE"))
+			else if(e.getMessage().contains("ORA_USER.UK_USERINFO_PHONE"))		// phone uk 위반
 			{
 				result = -2;
 			}
 			else
 			{
-				Logger.getGlobal().warning("연락처 추가 도중 문제가 발생하였습니다." + e.getMessage());	
+				Logger.getGlobal().warning("유저 정보 수정 도중 문제가 발생하였습니다." + e.getMessage());	
 			}
 		}
 		finally
@@ -216,7 +213,99 @@ public class ContactDAO
 		}
 		catch (SQLException e)
 		{
-			Logger.getGlobal().warning("로그인 도중 문제가 발생하였습니다." + e.getMessage());
+			Logger.getGlobal().warning("정보를 가져오는 도중 문제가 발생하였습니다." + e.getMessage());
+		}
+		finally
+		{
+			ConnectionManager.getInstance().close(conn, pstmt, rs);
+		}
+		
+		return result;
+	}
+	
+	// id 찾기
+	public String searchUserID(String name, String phone)
+	{
+		String result = "";
+		
+		Connection conn = ConnectionManager.getInstance().getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs 			= null;
+		
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("select userid			");
+		sql.append("  from userinfo			");
+		sql.append(" where phone = ?		");
+		sql.append("   and name = ?			");
+		
+		try
+		{
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, phone);
+			pstmt.setString(2, name);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				result = rs.getString("userid");
+			}
+		}
+		catch (SQLTimeoutException e)
+		{
+			Logger.getGlobal().warning("TimeOut Exception 발생");
+		}
+		catch (SQLException e)
+		{
+			Logger.getGlobal().warning("정보를 가져오는 도중 문제가 발생하였습니다." + e.getMessage());
+		}
+		finally
+		{
+			ConnectionManager.getInstance().close(conn, pstmt, rs);
+		}
+		
+		return result;
+	}
+	
+	// pw 찾기
+	public String searchPW(String userID, String name, String phone)
+	{
+		String result = "";
+		
+		Connection conn = ConnectionManager.getInstance().getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs 			= null;
+		
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("select password 		");
+		sql.append("  from userinfo			");
+		sql.append(" where userid = ?		");
+		sql.append("   and name = ?			");
+		sql.append("   and phone = ?		");
+		
+		try
+		{
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, userID);
+			pstmt.setString(2, name);
+			pstmt.setString(3, phone);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				result = rs.getString("password");
+			}
+		}
+		catch (SQLTimeoutException e)
+		{
+			Logger.getGlobal().warning("TimeOut Exception 발생");
+		}
+		catch (SQLException e)
+		{
+			Logger.getGlobal().warning("정보를 가져오는 도중 문제가 발생하였습니다." + e.getMessage());
 		}
 		finally
 		{
@@ -253,7 +342,6 @@ public class ContactDAO
 		sql.append(" where c.userid = ? 					");
 		sql.append(" order by c.contactid					");
 		
-
 		try
 		{
 			pstmt = conn.prepareStatement(sql.toString());
@@ -499,6 +587,7 @@ public class ContactDAO
 		return result;
 	}
 	
+	// 연락처 수정
 	public int updateContact(ContactVO contact)
 	{
 		int result = 0;
@@ -593,6 +682,7 @@ public class ContactDAO
 	////////////////////////////////// end contact
 	
 	////////////////////////////////// relation
+	// 그룹 추가
 	public int addRelation(String relation_name, String userID)
 	{
 		int result = 0;
@@ -602,7 +692,7 @@ public class ContactDAO
 
 		StringBuilder sql = new StringBuilder();
 		
-		// 회원번호는 가장큰수를 select하여 거기에 +1로 지정
+		// relation_key 가장큰수를 select하여 거기에 +1로 지정
 		sql.append("insert into relation									");
 		sql.append("values (NVL(LPAD((select max(relation_key)				");
 		sql.append("					from relation) + 1, 3, 0), '001')	");
@@ -644,6 +734,7 @@ public class ContactDAO
 		return result;
 	}
 	
+	// 유저 id로 그룹명 가져오기
 	public ArrayList<RelationVO> searchRelationByUserID(String userID )
 	{
 		ArrayList<RelationVO> result = new ArrayList<RelationVO>();
@@ -679,7 +770,7 @@ public class ContactDAO
 		}
 		catch (SQLException e)
 		{
-			Logger.getGlobal().warning("그룹리스트 검색 도중 문제가 발생하였습니다." + e.getMessage());
+			Logger.getGlobal().warning("그룹리스트를  가져오는 도중 문제가 발생하였습니다." + e.getMessage());
 		}
 		finally
 		{
@@ -689,6 +780,7 @@ public class ContactDAO
 		return result;
 	}
 	
+	// 그룹명 중복 체크
 	public RelationVO searchRelationByName(String relation_name, String userID)	// 사용자의 id로 등록한 그룹명 체크
 	{
 		RelationVO result = new RelationVO();

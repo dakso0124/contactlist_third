@@ -50,7 +50,7 @@ public class JoinServlet extends HttpServlet
 		{
 			response.sendRedirect("MainServlet");
 		}
-		else
+		else				// 가입 실패
 		{
 			if( addResult == -1)	// overflow
 			{
@@ -58,14 +58,14 @@ public class JoinServlet extends HttpServlet
 				request.setAttribute("user", user);
 				doGet(request, response);
 			}
-			else if( addResult == -2)
+			else if( addResult == -2)	// id 중복
 			{
 				request.setAttribute("msg", "id_overlap");
 				user.setUserid("");
 				request.setAttribute("user", user);
 				doGet(request, response);
 			}
-			else if( addResult == -3)
+			else if( addResult == -3)	// 전화번호 중복
 			{
 				request.setAttribute("msg", "phone_overlap");
 				user.setPhone("");

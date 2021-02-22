@@ -26,8 +26,8 @@ label
 body
 {
 	background-image: url("resource/background6.gif");
-	background-repeat: no-repeat;
-	background-size: cover;
+	background-repeat: repeat-x;
+	background-size: contain;
 }
 .bd-placeholder-img {
   font-size: 1.125rem;

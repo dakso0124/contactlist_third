@@ -37,14 +37,17 @@ public class MainServlet extends HttpServlet
 		
 		if(id == null || name == null)
 		{
+			if(request.getAttribute("msg") != null)	// session 만료일 경우
+			{
+				if(request.getAttribute("msg").equals("timeout"))
+					request.setAttribute("msg", "timeout");
+			}
+
 			RequestDispatcher disp = request.getRequestDispatcher("loginForm.jsp");
 			disp.forward(request, response);
-			
-			/* response.sendRedirect("loginForm.jsp"); */
 		}
 		else
 		{
-			// membervo request에 담아야함
 			ArrayList<ContactVO> contactList = m_service.showAll(id);
 			request.setAttribute("list", contactList);
 			

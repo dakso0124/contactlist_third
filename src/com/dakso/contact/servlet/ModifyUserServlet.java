@@ -18,11 +18,12 @@ import com.dakso.contact.service.UserService;
 public class ModifyUserServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	
+	UserService m_service;
        
     public ModifyUserServlet()
     {
         super();
+        m_service = new UserService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -39,7 +40,6 @@ public class ModifyUserServlet extends HttpServlet
 		}
 		else
 		{
-			UserService m_service = new UserService();
 			UserVO user = m_service.selectByName(id, name);
 			request.setAttribute("user", user);
 			
@@ -51,7 +51,6 @@ public class ModifyUserServlet extends HttpServlet
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		request.setCharacterEncoding("utf-8");
-		/* response.setCharacterEncoding("utf-8"); */
 		
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("id");
@@ -69,7 +68,7 @@ public class ModifyUserServlet extends HttpServlet
 			
 			UserVO user = m_service.selectByID(id, pw);
 			
-			if(user == null)
+			if(user == null)			// pw 에러
 			{
 				request.setAttribute("msg", "invalid");
 				
@@ -91,7 +90,7 @@ public class ModifyUserServlet extends HttpServlet
 				
 				int updateResult = m_service.updateUser(member); 
 				
-				if( updateResult > 0)		// 정보 수정하고 id, 이름 새로 저장
+				if( updateResult > 0)		// 정보 수정하고 session에 id, 이름 새로 저장
 				{
 					session.setAttribute("id", member.getUserid());
 					session.setAttribute("name", member.getName());

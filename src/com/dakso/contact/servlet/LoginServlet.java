@@ -41,8 +41,6 @@ public class LoginServlet extends HttpServlet
 			request.setAttribute("msg", "invalid");
 			RequestDispatcher disp = request.getRequestDispatcher("loginForm.jsp");
 			disp.forward(request, response);
-			
-			/* response.sendRedirect("loginForm.jsp"); */
 		}
 		else
 		{

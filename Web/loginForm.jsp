@@ -7,7 +7,6 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 	<title>로그인 페이지</title>
 	<link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,8 +16,8 @@
 	 		body
 	 		{
 	 			background-image: url("resource/background5.gif");
-	 			background-repeat: no-repeat;
-	 			background-size: cover;
+	 			background-repeat: repeat-x;
+	 			background-size: contain;
 	 		}
 	 		
 			.bd-placeholder-img
@@ -96,11 +95,11 @@
 			</form>
 		</div>
 		<div class="col-sm-6">
-			<form action="find.jsp" method="get">
-				<button class="w-100 btn btn-md btn-primary" type="submit" disabled>ID PW 찾기</button>
+			<form action="FindServlet" method="get">
+				<button class="w-100 btn btn-md btn-primary" type="submit">ID PW 찾기</button>
 			</form>
 		</div>
-	</div>	
+	</div>
 </div>
 </main>
 <script src="bootstrap-5.0/checkout/form-validation.js"></script>

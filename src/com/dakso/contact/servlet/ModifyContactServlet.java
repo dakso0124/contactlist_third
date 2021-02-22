@@ -19,11 +19,12 @@ import com.dakso.contact.service.UserService;
 public class ModifyContactServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private UserService m_service = new UserService();
+	private UserService m_service;
 	
     public ModifyContactServlet()
     {
         super();
+        m_service = new UserService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -39,7 +40,6 @@ public class ModifyContactServlet extends HttpServlet
 		}
 		else
 		{
-			// membervo request에 담아야함
 			UserService m_service = new UserService();
 			ArrayList<RelationVO> relations = m_service.searchRelationByUserID(id);
 			ContactVO contact = m_service.searchByContactID(request.getParameter("contactid"));
@@ -48,7 +48,7 @@ public class ModifyContactServlet extends HttpServlet
 			request.setAttribute("relations", relations);
 			
 			RequestDispatcher disp = request.getRequestDispatcher("modifyContactForm.jsp");
-			disp.forward(request, response);	
+			disp.forward(request, response);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class ModifyContactServlet extends HttpServlet
 			
 			ContactVO checkPhone = m_service.checkContactPhone(phone, id);
 			
-			if(checkPhone.getUserid() != null)	
+			if(checkPhone.getUserid() != null)
 			{
 				if(contact.getContactID() != checkPhone.getContactID() && checkPhone.getUserid().equals(id))	// 전화번호 중복
 				{
@@ -102,14 +102,13 @@ public class ModifyContactServlet extends HttpServlet
 				}
 			}
 			
-			
 			RelationVO relation = m_service.searchRelationByName(relation_name, id);
 			
-			if(relation.getRelation_name() == null)		// 그룹 첫입력
+			if(relation.getRelation_name() == null)		// 입력한 그룹의 이름이 없을때
 			{
 				int addRelationResult = m_service.addRelation(relation_name, id); 
 				
-				if(addRelationResult > 0)
+				if(addRelationResult > 0)				// 그룹추가 성공
 				{
 					relation = m_service.searchRelationByName(relation_name, id);
 					contact.setRealation_key(relation.getRealation_key());
@@ -118,7 +117,7 @@ public class ModifyContactServlet extends HttpServlet
 					
 					response.sendRedirect("MainServlet");
 				}
-				else
+				else									// 그룹 추가 실패
 				{
 					contact.setUserid(id);
 					

@@ -13,18 +13,18 @@ import javax.servlet.http.HttpSession;
 
 import com.dakso.contact.VO.ContactVO;
 import com.dakso.contact.VO.RelationVO;
-import com.dakso.contact.VO.UserVO;
 import com.dakso.contact.service.UserService;
 
 @WebServlet("/InsertContactServlet")
 public class InsertContactServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private UserService m_service = new UserService();
+	private UserService m_service;
 	
     public InsertContactServlet()
     {
         super();
+        m_service = new UserService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -82,8 +82,6 @@ public class InsertContactServlet extends HttpServlet
 				return;
 			}
 
-			ContactVO vo = m_service.checkContactPhone(phone, id);
-
 			if(m_service.checkContactPhone(phone, id).getContactID() != 0 )	// 전화번호 중복
 			{
 				request.setAttribute("contact", contact);
@@ -94,11 +92,11 @@ public class InsertContactServlet extends HttpServlet
 
 			RelationVO relation = m_service.searchRelationByName(relation_name, id);
 			
-			if(relation.getRelation_name() == null)
+			if(relation.getRelation_name() == null)					// 입력한 이름의 그룹이 존재하지 않을때
 			{
 				int addRelationResult = m_service.addRelation(relation_name, id); 
 				
-				if(addRelationResult > 0)
+				if(addRelationResult > 0)							// 그룹 추가
 				{
 					relation = m_service.searchRelationByName(relation_name, id);
 					contact.setRealation_key(relation.getRealation_key());
@@ -106,7 +104,7 @@ public class InsertContactServlet extends HttpServlet
 					
 					insertContact(contact, id, request, response);
 				}
-				else
+				else												// 그룹 추가 실패
 				{
 					contact.setUserid(id);
 					
@@ -134,7 +132,7 @@ public class InsertContactServlet extends HttpServlet
 	
 	private void insertContact(ContactVO contact, String id, HttpServletRequest request, HttpServletResponse response ) throws IOException, ServletException
 	{
-		int addResult = m_service.insertContact(contact);
+		int addResult = m_service.insertContact(contact);		// 연락처 추가
 		
 		if( addResult > 0)
 		{

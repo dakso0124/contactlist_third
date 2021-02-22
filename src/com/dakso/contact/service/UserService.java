@@ -68,6 +68,16 @@ public class UserService
 	{
 		return m_dao.selectByID(id, name);
 	}
+	
+	public String searchUserID(String name, String phone)
+	{
+		return m_dao.searchUserID(name, phone);
+	}
+	
+	public String searchPW(String userID, String name, String phone)
+	{
+		return m_dao.searchPW(userID, name, phone);
+	}
 	////////////////////////////////////////////////////////////////////////
 	
 	//////////////////////////////////////////////////////////////////////// relation

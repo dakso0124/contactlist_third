@@ -15,11 +15,14 @@ import com.dakso.contact.VO.ContactVO;
 import com.dakso.contact.service.UserService;
 
 @WebServlet("/DeleteContactServlet")
-public class DeleteContactServlet extends HttpServlet {
+public class DeleteContactServlet extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
-       
-    public DeleteContactServlet() {
+	private UserService m_service;
+    public DeleteContactServlet()
+    {
         super();
+        m_service = new UserService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -32,16 +35,21 @@ public class DeleteContactServlet extends HttpServlet {
 			request.setAttribute("msg", "timeout");
 			RequestDispatcher disp = request.getRequestDispatcher("MainServlet");
 			disp.forward(request, response);
-			
-			/* response.sendRedirect("MainServlet"); */
 		}
 		else
 		{
-			// membervo request에 담아야함
-			UserService m_service = new UserService();
 			int result = m_service.deleteContact(request.getParameter("contactid"));
-
-			response.sendRedirect("MainServlet");
+			
+			if(result <= 0)			// 삭제에 실패
+			{
+				request.setAttribute("msg", "fail");
+				RequestDispatcher disp = request.getRequestDispatcher("mainForm.jsp");
+				disp.forward(request, response);
+			}
+			else
+			{
+				response.sendRedirect("MainServlet");	
+			}
 		}
 	}
 

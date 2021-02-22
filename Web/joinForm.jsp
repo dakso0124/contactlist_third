@@ -15,9 +15,9 @@
 <style>
 h3
 {
-  background: -webkit-linear-gradient(#ffd86f, #fc6262);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+	background: -webkit-linear-gradient(#ffd86f, #fc6262);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
 label
 {
@@ -26,8 +26,8 @@ label
 body
 {
 	background-image: url("resource/background6.gif");
-	background-repeat: no-repeat;
-	background-size: cover;
+	background-repeat: repeat-x;
+	background-size: contain;
 }
 .bd-placeholder-img
 {
@@ -118,50 +118,6 @@ function addresspopup()
         	}
     }).open();
 }
-
-function checkpw_blur()
-{
-	var p1 = document.getElementById('pw').value;
-    var p2 = document.getElementById('pw_check').value;
-    
-    if( p1 != p2 )
-    {
-          //alert("비밀번호불일치");
-          const element = document.getElementById('selfinput');
-          element.innerHTML = "<div>비밀번호가 다릅니다.</div>";
-          return false;
-    }
-    return true;
-}
-
-function focus_pw()
-{
-    var p2 = document.getElementById('pw_check').value;
-    
-    //alert("비밀번호불일치");
-    const element = document.getElementById('selfinput');
-    element.innerHTML = "";
-}
-
-function checkpw_submit()
-{
-	var p1 = document.getElementById('pw').value;
-    var p2 = document.getElementById('pw_check').value;
-    
-    if( p1 != p2 )
-    {
-          alert("비밀번호를 확인해주세요.");
-          return false;
-    }
-    else
-    {
-    	document.myform.action="JoinServlet";
-    	document.myform.method="post";
-		document.myform.submit();
-    }
-    
-    return true;
-}
 //alert
 <c:if test="${msg ne null }">
 	<c:set var="msg" value="${msg}"/>
@@ -193,8 +149,7 @@ function checkpw_submit()
 
         <h4 class="mb-2" style=color:#9669f6>정보 입력</h4>
         
-        <!-- <form class="needs-validation" action="JoinServlet" method="post" novalidate> -->
-        <form class="needs-validation" name="myform" novalidate>
+        <form class="needs-validation" action="JoinServlet" method="post" novalidate>
           <div class="row g-3">
             <div class="col-sm-12">
               <label for="id" class="form-label">ID</label>
@@ -211,17 +166,6 @@ function checkpw_submit()
               <div class="invalid-feedback">
                   	비밀번호를 입력해 주세요.
                 </div>
-              </div>
-            </div>
-            
-            <div class="col-12">
-              <label for="pw" class="form-label">비밀번호 확인</label>
-              <div class="input-group">
-                <input type="password" class="form-control" id="pw_check" name="pw_check" placeholder="비밀번호를 한번더 입력해 주세요" onfocus="focus_pw()" onblur="checkpw_blur()" required>
-                <div style="width: 100%; margin-top: 0.25rem; font-size: 0.875em; color: #dc3545;" id="selfinput"></div>
-              <div class="invalid-feedback">
-                  	비밀번호를 입력해 주세요.
-              </div>
               </div>
             </div>
 
@@ -249,7 +193,7 @@ function checkpw_submit()
             
             <div class="col-sm-4">
              <label class="pt-4"></label>
-              <input type="text" class="form-control" id="second_digit" name="second_digit" maxlength="4" pattern=".{3,4}" value="${user.phone2}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+              <input type="text" class="form-control" id="second_digit" name="second_digit" maxlength="4" pattern=".{3,4}" value="${user.phone2}" oninput="removeChar(event)" style="ime-mode:disabled" required/>
               <div class="invalid-feedback">
               	전화번호를 올바르게 입력해 주세요.
               </div>
@@ -257,7 +201,7 @@ function checkpw_submit()
             
             <div class="col-sm-4">
 	            <label class="pt-4"></label>
-	            	<input type="text" class="form-control" id="third_digit" name="third_digit" maxlength="4" pattern=".{4,4}" value="${user.phone2}" required oninput="removeChar(event)" style="ime-mode:disabled"/>
+	            	<input type="text" class="form-control" id="third_digit" name="third_digit" maxlength="4" pattern=".{4,4}" value="${user.phone2}" oninput="removeChar(event)" style="ime-mode:disabled" required />
 	            	<div class="invalid-feedback">
 	              		전화번호를 올바르게 입력해 주세요.
 	            	</div>
@@ -292,7 +236,7 @@ function checkpw_submit()
             
 
           <div class="my-4">
-          	<button class="w-100 btn btn-primary btn-lg" type="button" onclick="checkpw_submit()">가입하기</button>
+          	<button class="w-100 btn btn-primary btn-lg" type="submit" >가입하기</button>
           </div>
           </div>
         </form>

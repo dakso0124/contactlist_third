@@ -15,9 +15,10 @@
 <style>
 h3
 {
-  background: -webkit-linear-gradient(#ffd86f, #fc6262);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+	background: -webkit-linear-gradient(#F9E397, #C4C2C8);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	font-weight: bold;
 }
 label
 {
@@ -97,7 +98,7 @@ function showfield(name)
   <main>
   <div class="col-lg-12">
     <div class="pt-3 text-center">
-    	<h3 class="my-5">연락처 추가</h3>
+    	<h3 class="my-5">연락처 수정</h3>
     </div>
 
         <h4 class="mb-2" style=color:#9669f6>연락처 수정</h4>
